@@ -1,29 +1,29 @@
 version: "3"
 
 services:
-  frontend:
-    build:
-      context: ./frontend
-    # image: soe153/projectmanagement-frontend:latest
-    environment:
-      NODE_ENV: production
-    depends_on:
-      - backend
-      - mysql
-    develop:
-      watch:
-        - path: ./frontend/package.json
-          action: rebuild
-        - path: ./frontend/package-lock.json
-          action: rebuild
-        - path: ./frontend
-          target: /app
-          action: sync
-    ports:
-      - "0.0.0.0:3000:3000"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #   # image: soe153/projectmanagement-frontend:latest
+  #   environment:
+  #     NODE_ENV: production
+  #   depends_on:
+  #     - backend
+  #     - mysql
+  #   develop:
+  #     watch:
+  #       - path: ./frontend/package.json
+  #         action: rebuild
+  #       - path: ./frontend/package-lock.json
+  #         action: rebuild
+  #       - path: ./frontend
+  #         target: /app
+  #         action: sync
+  #   ports:
+  #     - "0.0.0.0:3000:3000"
+  #   volumes:
+  #     - ./frontend:/app
+  #     - /app/node_modules
 
   backend:
     build:
