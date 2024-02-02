@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Project>
  */
 class ProjectFactory extends Factory
 {
@@ -16,9 +17,11 @@ class ProjectFactory extends Factory
      */
     public function definition(): array
     {
+        $user = User::inRandomOrder()->first();
+
         return [
-            'name' => fake()->word,
-            'user_id' => factory(App\User::class),
+            'title' => fake()->word,
+            'user_id' => $user->id,
             'due_date' => fake()->date,
         ];
     }

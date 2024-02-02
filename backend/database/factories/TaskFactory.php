@@ -2,10 +2,13 @@
 
 namespace Database\Factories;
 
+use App\Models\Project;
+use App\Models\Task;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Task>
  */
 class TaskFactory extends Factory
 {
@@ -16,14 +19,17 @@ class TaskFactory extends Factory
      */
     public function definition(): array
     {
+        $user = User::inRandomOrder()->first();
+        $project = Project::inRandomOrder()->first();
+
         return [
-            'name' => fake()->word,
-            'description' => fake()->text,
-            'due_date' => fake()->date,
-            'project_id' => factory(App\Project::class),
-            'user_id' => factory(App\User::class),
-            'parent_task_id' => null, // To be modified based on your requirements
-            'position' => fake()->randomNumber(),
+            'title' => $this->faker->word,
+            'description' => $this->faker->text,
+            'due_date' => $this->faker->date,
+            'project_id' => $project->id,
+            'user_id' => $user->id,
+            'parent_task_id' => null, // Modify based on your requirements
+            'position' => $this->faker->numberBetween(1, 10),
         ];
     }
 }
