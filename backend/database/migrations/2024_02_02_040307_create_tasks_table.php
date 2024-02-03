@@ -30,7 +30,7 @@ return new class extends Migration
             $table->unsignedBigInteger('project_id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('parent_task_id')->nullable();
-            $table->integer('position');
+            $table->integer('position')->nullable();
             $table->timestamps();
 
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
