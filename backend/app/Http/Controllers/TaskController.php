@@ -23,4 +23,22 @@ class TaskController extends Controller
 
         return back()->with('success', 'Task Added Successfully');
     }
+
+    public function assignMembers(Request $request, Task $task)
+    {
+        $assignedMembers = $request->input('members', []);
+
+        foreach ($assignedMembers as $userId) {
+            $existingMember = $task
+                ->users()
+                ->where('user_id', $userId)
+                ->exists();
+            if (!$existingMember) {
+                $task->users()->attach($userId);
+            }
+        }
+
+        return back()->with('success', 'Task Assigned Successfully');
+        // Redirect or return a response
+    }
 }

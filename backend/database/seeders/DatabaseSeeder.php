@@ -19,23 +19,25 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
+        Role::factory(10)->create();
+
         // Create three users with manual data
         User::create([
             'name' => 'User1',
-            'email' => 'user1@example.com',
-            'password' => bcrypt('password1'),
+            'email' => 'test@gmail.com',
+            'password' => bcrypt('kmd123'),
         ]);
 
         User::create([
             'name' => 'User2',
-            'email' => 'user2@example.com',
-            'password' => bcrypt('password2'),
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('kmd123'),
         ]);
 
         User::create([
             'name' => 'User3',
-            'email' => 'user3@example.com',
-            'password' => bcrypt('password3'),
+            'email' => 'user1@example.com',
+            'password' => bcrypt('password1'),
         ]);
 
         // Fetch all users
