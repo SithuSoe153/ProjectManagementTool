@@ -14,11 +14,13 @@ class TaskController extends Controller
             'title' => ['required'],
             'description' => ['required'],
             'due_date' => ['required'],
-            'position' => [1],
         ]);
 
         $cleanData['user_id'] = auth()->id();
         $cleanData['project_id'] = $project->id;
+        // Get the last task's position and increment by 1
+        $cleanData['position'] = $project->tasks()->max('position') + 1;
+
         $newTask = $project->tasks()->create($cleanData);
 
         return back()->with('success', 'Task Added Successfully');

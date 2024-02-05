@@ -22,14 +22,22 @@ class ProjectController extends Controller
         ]);
     }
 
+
     public function show(Project $project)
     {
+        $project->load(['tasks' => function ($query) {
+            $query->orderBy('position', 'asc');
+        }, 'tasks.users']);
 
         return view('projects.show', [
-            'project' => $project->load('tasks.users'),
+            'project' => $project,
             'roles' => Role::all(),
         ]);
     }
+
+
+
+
 
     public function store(ProjectRequest $request)
     {
@@ -88,8 +96,6 @@ class ProjectController extends Controller
                 ]);
             }
         }
-
-
 
         return redirect()->back()->with('success', 'Members added successfully.');
     }

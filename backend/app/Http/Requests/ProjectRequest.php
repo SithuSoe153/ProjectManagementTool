@@ -24,6 +24,7 @@ class ProjectRequest extends FormRequest
 
         return [
             'title' => ['required', 'min:5'],
+            'start_date' => 'required',
             // 'slug' => 'required',
             // 'photo' => ['required', 'image'],
             'due_date' => 'required'

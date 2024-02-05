@@ -8,7 +8,9 @@ use App\Models\Project;
 use App\Models\Role;
 use App\Models\Task;
 use App\Models\User;
+use App\Models\UserRole;
 use Database\Factories\TaskUserFactory;
+use Database\Factories\UserRoleFactory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -23,22 +25,24 @@ class DatabaseSeeder extends Seeder
 
         // Create three users with manual data
         User::create([
-            'name' => 'User1',
+            'name' => 'tTestuser',
             'email' => 'test@gmail.com',
             'password' => bcrypt('kmd123'),
         ]);
 
         User::create([
-            'name' => 'User2',
+            'name' => 'aAdminuser',
             'email' => 'admin@gmail.com',
             'password' => bcrypt('kmd123'),
         ]);
 
         User::create([
-            'name' => 'User3',
+            'name' => 'User1',
             'email' => 'user1@example.com',
             'password' => bcrypt('password1'),
         ]);
+
+        UserRole::factory()->create();
 
         // Fetch all users
         $users = User::all();
@@ -49,11 +53,15 @@ class DatabaseSeeder extends Seeder
             $project1 = Project::create([
                 'user_id' => $user->id,
                 'title' => 'Project 1 for ' . $user->name,
+                'start_date' => now()->toDateString(),
+                'due_date' => now()->addDays(7)->toDateString(),
             ]);
 
             $project2 = Project::create([
                 'user_id' => $user->id,
                 'title' => 'Project 2 for ' . $user->name,
+                'start_date' => now()->toDateString(),
+                'due_date' => now()->addDays(7)->toDateString(),
             ]);
 
             // Create two tasks for each project
