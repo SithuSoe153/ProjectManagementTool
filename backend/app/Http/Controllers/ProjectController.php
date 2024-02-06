@@ -41,7 +41,7 @@ class ProjectController extends Controller
 
     public function store(ProjectRequest $request)
     {
-
+        dd($request->all());
         $cleanData = $request->validated();
         $cleanData['user_id'] = auth()->id();
         // $cleanData['photo'] = request('photo')->store('/images');

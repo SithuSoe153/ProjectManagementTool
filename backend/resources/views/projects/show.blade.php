@@ -2,12 +2,14 @@
 
 
     <div class="container my-4 col-8">
+        {{-- Project Title Start --}}
         <h1>Project name: {{ $project->title }}</h1>
         <h4>Start Date: {{ $project->start_date }}</h4>
         <h4>Due Date: {{ $project->due_date }}</h4>
         <p>Project Creator: {{ $project->user->name }}
             {{ $role = optional($project->user->roles->first())->name ?: '' }}</p>
 
+        {{-- Show Members Start --}}
         <div>
             <strong>
 
@@ -26,8 +28,10 @@
             </a>
 
         </div>
+        {{-- Show Members End --}}
 
-        <!-- Hidden form initially -->
+
+        <!-- Hidden Add Member form initially start-->
         <div class="container my-4 col-8" id="memberForm" style="display: none;">
             <div class="card">
 
@@ -74,19 +78,20 @@
 
             </div>
         </div>
-
-
-
         <hr>
+        <!-- Hidden Add Member form initially end-->
+
+        {{-- Project Title End --}}
 
 
+        {{-- Add Task Start --}}
         <div>
             <div class="container my-3">
                 <a href="#" class="btn btn-danger" onclick="toggleFormTask()">Add Task</a>
 
             </div>
 
-            <!-- Hidden form initially -->
+            <!-- Hidden Add Task form initially -->
             <div class="container my-4 col-8" id="taskForm" style="display: none;">
                 <div class="card">
 
@@ -113,18 +118,51 @@
             </div>
 
 
-
         </div>
+
+        {{-- Add Task End --}}
+
 
 
         <ul>
 
 
 
+            <!-- Hidden Toast form initially -->
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <img src="" class="rounded me-2" alt="...">
+                        <strong class="me-auto">Bootstrap</strong>
+                        <small>11 mins ago</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        Hello, world! This is a toast message.
+                    </div>
+                </div>
+            </div>
+
+            {{-- Toast Session Check Start --}}
+            @if (session('toast'))
+                <script>
+                    const toastLiveExample = document.getElementById('liveToast');
+                    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(
+                        toastLiveExample);
+                    toastBootstrap.show();
+                </script>
+                {{-- Optionally, clear the message after showing it to prevent it from reappearing on refresh --}}
+                @php session()->forget('toast'); @endphp
+            @endif
+            {{-- Toast Session Check End --}}
+
+
+
+            {{-- CheckBox and Text Title Start --}}
             @forelse ($project->tasks as $task)
                 <div class="form-check">
                     <input {{ $task->is_completed ? 'checked' : '' }} class="form-check-input task-checkbox"
-                        type="checkbox" value="" id="task-{{ $task->id }}">
+                        value="{{ $task->id }}" type="checkbox" value="" id="task-{{ $task->id }}">
                     <label class="form-check-label" for="task-{{ $task->id }}">
                         <span class="task-text {{ $task->is_completed ? 'task-completed' : '' }}">{{ $task->title }}
                             |
@@ -151,14 +189,15 @@
 
                 <p>Due Date: {{ $task->due_date }}</p>
 
+                {{-- CheckBox and Text Title End --}}
 
-                <!-- Hidden form initially -->
-                <script>
-                    document.addEventListener("DOMContentLoaded", function() {
-                        var membersSelect = new MultiSelectTag('members_{{ $task->id }}');
-                    });
-                </script>
+                <!-- Hidden Member Assign form initially -->
                 <div class="container my-4 col-8" id="assignForm-{{ $task->id }}" style="display: none;">
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            var membersSelect = new MultiSelectTag('members_{{ $task->id }}');
+                        });
+                    </script>
                     <div class="card">
                         <form action="{{ route('task.assignMembers', $task->id) }}" method="POST" class="card-body"
                             id="assignMemberForm">
@@ -179,7 +218,7 @@
                                 </select>
                             </div>
                             {{-- <button type="button" onclick="addAssignMember()" class="btn btn-primary my-3">Add
-                Member</button> --}}
+                                    Member</button> --}}
                             <button type="submit" class="btn btn-success my-3">Assign Members</button>
                         </form>
                     </div>
@@ -192,6 +231,9 @@
                 <p>No Tasks Here</p>
             @endforelse
 
+            {{-- CheckBox and Text Title End --}}
+
+
         </ul>
 
         <br>
@@ -199,6 +241,8 @@
 
 
     <script>
+        // Toogle Script Start
+
         function toggleFormTask() {
             var form = document.getElementById("taskForm");
             form.style.display = form.style.display === "none" ? "block" : "none";
@@ -215,124 +259,51 @@
             var form = document.getElementById("assignForm-" + taskId);
             form.style.display = form.style.display === "none" ? "block" : "none";
         }
-    </script>
+
+        // Toogle Script End
 
 
-    <script>
-        // document.addEventListener("DOMContentLoaded", function() {
-        // Attach click event listener to all checkboxes with the 'task-checkbox' class
+        // CheckBox Script query, toast Start
         document.querySelectorAll('.task-checkbox').forEach(function(checkbox) {
             checkbox.addEventListener('change', function() {
+                var taskId = this.getAttribute(
+                    'value'); // Assuming the checkbox has a value attribute with the task ID
                 var taskText = this.parentElement.querySelector('.task-text');
                 if (this.checked) {
                     taskText.classList.add('task-completed');
+                    // Correct URL construction for route model binding
+
+                    document.addEventListener('DOMContentLoaded', function() {
+                        // Check if there's a Laravel session flash message for the toast
+                        @if (session('toast'))
+                            console.log('oka');
+                            const toastLiveExample = document.getElementById('liveToast');
+                            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(
+                                toastLiveExample);
+                            toastBootstrap.show();
+
+                            // Optionally, clear the message after showing it to prevent it from reappearing on refresh
+                            @php session()->forget('toast'); @endphp
+                        @endif
+                    });
+
+                    window.location.href = '/task/toggle-completed/' + taskId;
+
+
                 } else {
                     taskText.classList.remove('task-completed');
+
+                    // const toastLiveExample = document.getElementById('liveToast')
+                    // const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+                    // toastBootstrap.show()
+                    // Optionally handle the uncheck action differently
+                    window.location.href = '/task/toggle-completed/' + taskId;
                 }
             });
         });
-        // });
-    </script>
+        // CheckBox Script query, toast Start
 
-
-    {{-- <script>
-        // Store selected members in an array
-        var selectedMembers = [];
-
-        function addMember() {
-            // Get selected email and roles
-            var email = document.getElementById('email').value;
-            var rolesSelect = document.getElementById('roles');
-            var selectedRoles = [...rolesSelect.selectedOptions].map(option => option.text);
-
-            // Add member data to the array
-            selectedMembers.push({
-                email: email,
-                roles: selectedRoles
-            });
-
-            // Display selected members
-            displaySelectedMembers();
-
-            // Clear the form
-            document.getElementById('email').value = '';
-            rolesSelect.selectedIndex = -1;
-        }
-
-        function displaySelectedMembers() {
-            // Display selected members in the 'selectedRoles' div
-            var selectedRolesDiv = document.getElementById('selectedRoles');
-            selectedRolesDiv.innerHTML = '';
-
-            selectedMembers.forEach(function(member) {
-                selectedRolesDiv.innerHTML += '<p><strong>Email:</strong> ' + member.email + '</p>';
-                selectedRolesDiv.innerHTML += '<p><strong>Roles:</strong> ' + member.roles.join(', ') + '</p>';
-                selectedRolesDiv.innerHTML += '<hr>';
-            });
-        }
-    </script> --}}
-
-
-    <script>
-        // Initialize the multi-select tag
         var rolesSelect = new MultiSelectTag('roles');
-
-        // var selectedMembers = [];
-
-        // function addMember() {
-        //     var email = document.getElementById('email').value;
-        //     var selectedRoles = rolesSelect.getSelectedValues();
-
-        //     selectedMembers.push({
-        //         email,
-        //         roles: selectedRoles
-        //     });
-
-        //     displaySelectedMembers();
-        // }
-
-        // function displaySelectedMembers() {
-        //     var selectedRolesDiv = document.getElementById('selectedRoles');
-        //     selectedRolesDiv.innerHTML = '';
-
-        //     selectedMembers.forEach((member, index) => {
-        //         selectedRolesDiv.innerHTML += `<p><strong>Member ${index + 1}:</strong></p>`;
-        //         selectedRolesDiv.innerHTML += `<p><strong>Email:</strong> ${member.email}</p>`;
-        //         selectedRolesDiv.innerHTML += `<p><strong>Roles:</strong> ${member.roles.join(', ')}</p>`;
-        //         selectedRolesDiv.innerHTML += '<hr>';
-        //     });
-        // }
-    </script>
-
-
-
-    <script>
-        // Initialize the multi-select tag for assigning members
-        // var membersSelect = new MultiSelectTag('members');
-
-        // var assignedMembers = [];
-
-        // function addAssignMember() {
-        //     var selectedMembers = assignMemberSelect.getSelectedValues();
-
-        //     assignedMembers.push({
-        //         members: selectedMembers
-        //     });
-
-        //     displayAssignedMembers();
-        // }
-
-        // function displayAssignedMembers() {
-        //     var assignedMembersDiv = document.getElementById('assignedMembers');
-        //     assignedMembersDiv.innerHTML = '';
-
-        //     assignedMembers.forEach((member, index) => {
-        //         assignedMembersDiv.innerHTML += `<p><strong>Assigned Member ${index + 1}:</strong></p>`;
-        //         assignedMembersDiv.innerHTML += `<p><strong>Email:</strong> ${member.email}</p>`;
-        //         assignedMembersDiv.innerHTML += `<p><strong>Roles:</strong> ${member.roles.join(', ')}</p>`;
-        //         assignedMembersDiv.innerHTML += '<hr>';
-        //     });
-        // }
     </script>
 
 

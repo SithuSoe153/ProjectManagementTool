@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth-user')->group(function () {
 
+    Route::get('/task/toggle-completed/{task}', [TaskController::class, 'toggleCompleted']);
+
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::get('/', [ProjectController::class, 'index']);

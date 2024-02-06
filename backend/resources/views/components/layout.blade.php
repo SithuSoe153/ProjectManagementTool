@@ -22,6 +22,8 @@
         href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/css/multi-select-tag.css" />
 
 
+    {{-- BootStrap --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
 
 
 </head>
@@ -48,6 +50,20 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous">
     </script>
+
+
+
+    @if (session('toast'))
+        <script>
+            const toastLiveExample = document.getElementById('liveToast');
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(
+                toastLiveExample);
+            toastBootstrap.show();
+        </script>
+        {{-- Optionally, clear the message after showing it to prevent it from reappearing on refresh --}}
+        @php session()->forget('toast'); @endphp
+    @endif
+
 
 </body>
 

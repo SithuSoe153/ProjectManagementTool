@@ -43,4 +43,19 @@ class TaskController extends Controller
         return back()->with('success', 'Task Assigned Successfully');
         // Redirect or return a response
     }
+
+    public function toggleCompleted(Request $request)
+    {
+
+        $taskId = $request->task;
+        $task = Task::find($taskId);
+        if ($task) {
+            $task->is_completed = !$task->is_completed;
+            $task->save();
+            // return response()->json(['success' => true]);
+            return back()->with('toast', 'Task Updated Successfully');
+        }
+
+        return response()->json(['success' => false]);
+    }
 }
