@@ -23,4 +23,9 @@ class ProjectRoleAssignment extends Model
     {
         return $this->belongsTo(Role::class);
     }
+
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'project_role_assignments');
+    }
 }

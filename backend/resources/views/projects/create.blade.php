@@ -14,6 +14,15 @@
             @enderror
 
             <div class="form-group">
+                <label for="start_date">Start Date</label>
+                <input type="date" name="start_date" class="form-control" id="start_date"
+                    value="{{ old('start_date') }}">
+            </div>
+            @error('start_date')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+
+            <div class="form-group">
                 <label for="due_date">Due Date</label>
                 <input type="date" name="due_date" class="form-control" id="due_date" value="{{ old('due_date') }}">
             </div>

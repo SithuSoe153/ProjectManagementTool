@@ -8,7 +8,9 @@ use App\Models\Project;
 use App\Models\Role;
 use App\Models\Task;
 use App\Models\User;
+use App\Models\UserRole;
 use Database\Factories\TaskUserFactory;
+use Database\Factories\UserRoleFactory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -19,24 +21,28 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
+        Role::factory(10)->create();
+
         // Create three users with manual data
+        User::create([
+            'name' => 'tTestuser',
+            'email' => 'test@gmail.com',
+            'password' => bcrypt('kmd123'),
+        ]);
+
+        User::create([
+            'name' => 'aAdminuser',
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('kmd123'),
+        ]);
+
         User::create([
             'name' => 'User1',
             'email' => 'user1@example.com',
             'password' => bcrypt('password1'),
         ]);
 
-        User::create([
-            'name' => 'User2',
-            'email' => 'user2@example.com',
-            'password' => bcrypt('password2'),
-        ]);
-
-        User::create([
-            'name' => 'User3',
-            'email' => 'user3@example.com',
-            'password' => bcrypt('password3'),
-        ]);
+        UserRole::factory()->create();
 
         // Fetch all users
         $users = User::all();
@@ -47,11 +53,15 @@ class DatabaseSeeder extends Seeder
             $project1 = Project::create([
                 'user_id' => $user->id,
                 'title' => 'Project 1 for ' . $user->name,
+                'start_date' => now()->toDateString(),
+                'due_date' => now()->addDays(7)->toDateString(),
             ]);
 
             $project2 = Project::create([
                 'user_id' => $user->id,
                 'title' => 'Project 2 for ' . $user->name,
+                'start_date' => now()->toDateString(),
+                'due_date' => now()->addDays(7)->toDateString(),
             ]);
 
             // Create two tasks for each project

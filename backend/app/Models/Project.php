@@ -23,4 +23,9 @@ class Project extends Model
     {
         return $this->belongsToMany(User::class, 'project_role_assignments');
     }
+
+    public function project_role_assignments()
+    {
+        return $this->hasMany(ProjectRoleAssignment::class);
+    }
 }

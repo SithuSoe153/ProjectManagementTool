@@ -22,6 +22,7 @@ class ProjectFactory extends Factory
         return [
             'title' => fake()->word,
             'user_id' => $user->id,
+            'start_date' => now()->toDateString(),
             'due_date' => fake()->date,
         ];
     }

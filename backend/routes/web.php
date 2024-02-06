@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::middleware('auth-user')->group(function () {
+
+    Route::get('/task/toggle-completed/{task}', [TaskController::class, 'toggleCompleted']);
+
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::get('/', [ProjectController::class, 'index']);
@@ -16,9 +19,12 @@ Route::middleware('auth-user')->group(function () {
     Route::get('/project/create', [ProjectController::class, 'create']);
     Route::post('/project/store', [ProjectController::class, 'store']);
 
-    Route::get('/project/task/create', [TaskController::class, 'create']);
     Route::post('/project/{project}/task', [TaskController::class, 'store']);
 
+    Route::post('/project/{project}/member', [ProjectController::class, 'storeMembers']);
+
+    Route::post('/task/{task}/assign-members', [TaskController::class, 'assignMembers'])
+        ->name('task.assignMembers');
     // Route::post('/blogs/{blog:slug}/comments', [CommentController::class, 'store']);
     // Route::post('/blogs/{blog:slug}/subscribe', [subscribeController::class, 'subscribe'])->name('blogs.toggle');
     // Route::delete('/blogs/comments/delete/{comment}', [CommentController::class, 'delete'])->middleware('can:delete,comment');
