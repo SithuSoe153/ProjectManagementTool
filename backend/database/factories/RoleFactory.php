@@ -14,6 +14,9 @@ class RoleFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
+    protected static $sequence = 0;
+
     public function definition()
     {
         $roles = [
@@ -29,7 +32,10 @@ class RoleFactory extends Factory
             'Sales' => 'Sales role',
         ];
 
-        $name = $this->faker->unique()->randomElement(array_keys($roles));
+
+        // $name = $this->faker->unique()->randomElement(array_keys($roles));
+        $name = array_keys($roles)[self::$sequence];
+        self::$sequence++;
 
         return [
             'name' => $name,

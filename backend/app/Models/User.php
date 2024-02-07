@@ -53,6 +53,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Project::class);
     }
+    public function projectRoleAssignments()
+    {
+        return $this->hasMany(ProjectRoleAssignment::class);
+    }
 
     public function tasks()
     {

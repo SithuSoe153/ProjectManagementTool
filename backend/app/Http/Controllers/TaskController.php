@@ -53,7 +53,7 @@ class TaskController extends Controller
             $task->is_completed = !$task->is_completed;
             $task->save();
             // return response()->json(['success' => true]);
-            return back()->with('toast', 'Task Updated Successfully');
+            return back()->with('toast', 'Complete Task');
         }
 
         return response()->json(['success' => false]);

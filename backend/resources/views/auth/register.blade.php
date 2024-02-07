@@ -1,43 +1,55 @@
 <x-layout>
-<div class="form-control">
-    <form action="/register" method="POST" class="my-3">
-        <h3>Creater User Account</h3>
-        @csrf
-        <div>
-            <label for="">Name:</label>
-            <input type="text" value="{{old('name')}}" name="name">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title text-center mb-4">Create Your Account</h3>
+                        <form action="/register" method="POST">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Name:</label>
+                                <input type="text" class="form-control" id="name" name="name"
+                                    value="{{ old('name') }}" required>
+                                @error('name')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username:</label>
+                                <input type="text" class="form-control" id="username" name="username"
+                                    value="{{ old('username') }}" required>
+                                @error('username')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email:</label>
+                                <input type="email" class="form-control" id="email" name="email"
+                                    value="{{ old('email') }}" required>
+                                @error('email')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password:</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password_confirmation" class="form-label">Confirm Password:</label>
+                                <input type="password" class="form-control" id="password_confirmation"
+                                    name="password_confirmation" required>
+                                @error('password')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">Register</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-        @error('name')
-            <p class="text-danger">{{$message}}</p>
-        @enderror
-        <div>
-            <label for="">Username:</label>
-            <input type="text" value="{{old('username')}}" name="username">
-        </div>
-        @error('username')
-            <p class="text-danger">{{$message}}</p>
-        @enderror
-        <div>
-            <label for="">Email:</label>
-            <input type="email" value="{{old('email')}}" name="email">
-        </div>
-        @error('email')
-            <p class="text-danger">{{$message}}</p>
-        @enderror
-        <div>
-            <label for="">Password:</label>
-            <input type="password" name="password">
-        </div>
-        <div>
-            <label for="">Confirm Password:</label>
-            <input type="password" name="password_confirmation">
-        </div>
-        @error('password')
-            <p class="text-danger">{{$message}}</p>
-        @enderror
-        <div>
-            <button type="submit" class="button">register</button>
-        </div>
-    </form>
-</div>
+    </div>
 </x-layout>

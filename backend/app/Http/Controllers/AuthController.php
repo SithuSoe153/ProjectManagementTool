@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -42,7 +43,15 @@ class AuthController extends Controller
             'email' => ['required'],
             'password' => ['required', 'min:6', 'max:16', 'confirmed']
         ]);
+
         $user = User::create($cleanData);
+
+        // Get the appropriate role (e.g., 'Employee')
+        $role = Role::where('name', 'Employee')->first();
+
+        // Attach the role to the user
+        $user->roles()->attach($role);
+
         auth()->login($user);
         return redirect('/')->with('success', 'Welcome to creativecoder ' . $user->name);
     }

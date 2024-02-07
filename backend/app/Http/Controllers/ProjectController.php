@@ -15,10 +15,13 @@ class ProjectController extends Controller
     public function index()
     {
         $projects = auth()->user()->projects()->latest()->get();
-        // $projects = auth()->user()->projects()->get();
+
+        $assignedProjects = auth()->user()->projectRoleAssignments;
+
 
         return view('projects.index', [
-            'projects' => $projects,
+            'projects' => $projects->load('tasks.users'),
+            'assignedProjects' => $assignedProjects->load('project'),
         ]);
     }
 
@@ -41,7 +44,6 @@ class ProjectController extends Controller
 
     public function store(ProjectRequest $request)
     {
-        dd($request->all());
         $cleanData = $request->validated();
         $cleanData['user_id'] = auth()->id();
         // $cleanData['photo'] = request('photo')->store('/images');
