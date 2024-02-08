@@ -11,8 +11,6 @@
             @endif
 
 
-
-
             @if (auth()->check())
                 <a href="/profile/{{ auth()->user()->id }}/edit" class="nav-link">{{ auth()->user()->username }}</a>
             @endif

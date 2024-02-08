@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Permission;
+use App\Models\Role;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -41,5 +43,18 @@ class RoleFactory extends Factory
             'name' => $name,
             'description' => $roles[$name],
         ];
+    }
+
+    public function configure()
+    {
+        return $this->afterCreating(function (Role $role) {
+            // Attach specific permissions to the role
+            if ($role->name === 'Admin') {
+                $role->permissions()->attach([1, 2, 3, 4, 5]); // Adjust the permission IDs as needed
+            }
+            if ($role->name === 'Manager') {
+                $role->permissions()->attach([1, 2, 3, 4]); // Adjust the permission IDs as needed
+            }
+        });
     }
 }

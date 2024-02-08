@@ -19,14 +19,16 @@ class PermissionFactory extends Factory
     public function definition(): array
     {
         $permissions = [
-            'create_task' => 'Allows users to create new tasks',
-            'view_task' => 'Allows users to view tasks',
-            'update_task' => 'Allows users to update tasks',
-            'delete_task' => 'Allows users to delete tasks',
-            'create_project' => 'Allows users to create new projects',
-            'view_project' => 'Allows users to view projects',
-            'update_project' => 'Allows users to update projects',
-            'delete_project' => 'Allows users to delete projects',
+            'create_Task' => 'Allows users to create new tasks',
+            'view_Task' => 'Allows users to view tasks',
+            'update_Task' => 'Allows users to update tasks',
+            'delete_Task' => 'Allows users to delete tasks',
+            'check_Task' => 'Allows users to delete tasks',
+
+            'create_Project' => 'Allows users to create new projects',
+            'view_Project' => 'Allows users to view projects',
+            'update_Project' => 'Allows users to update projects',
+            'delete_Project' => 'Allows users to delete projects',
 
         ];
 

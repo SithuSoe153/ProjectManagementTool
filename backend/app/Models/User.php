@@ -67,4 +67,18 @@ class User extends Authenticatable
     {
         return view('auth.profile', ['user' => $user]);
     }
+
+    public function hasRole(array $roleNames): bool
+    {
+        // Check if the user has any of the specified roles
+        return $this->roles()->whereIn('name', $roleNames)->exists();
+    }
+
+    public function hasPermission(string $permissionName): bool
+    {
+        // Check if any of the user's roles have the specified permission
+        return $this->roles()->whereHas('permissions', function ($query) use ($permissionName) {
+            $query->where('name', $permissionName);
+        })->exists();
+    }
 }
