@@ -18,24 +18,27 @@
             </div>
             {{-- Hidden Add Member form initially --}}
             <div id="memberForm" style="display: none;">
-                <div class="card-body">
-                    <form action="/project/{{ $project->id }}/member" method="POST">
-                        @csrf
-                        <h5 class="card-title">Add Member</h5>
-                        <div class="mb-3">
-                            <label for="email">Email:</label>
-                            <input type="email" class="form-control" id="email" name="email">
-                        </div>
-                        <div class="mb-3">
-                            <label for="roles">Roles:</label>
-                            <select name="roles[]" id="roles" class="form-select" multiple>
-                                @foreach ($roles as $role)
-                                    <option value="{{ $role->id }}">{{ $role->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-success">Save Members</button>
-                    </form>
+                <div class="container col-6">
+
+                    <div class="card-body">
+                        <form action="/project/{{ $project->id }}/member" method="POST">
+                            @csrf
+                            <h5 class="card-title">Add Member</h5>
+                            <div class="mb-3">
+                                <label for="email">Email:</label>
+                                <input type="email" class="form-control" id="email" name="email">
+                            </div>
+                            <div class="mb-3">
+                                <label for="roles">Roles:</label>
+                                <select name="roles[]" id="roles" class="form-select" multiple>
+                                    @foreach ($roles as $role)
+                                        <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-success">Save Members</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -128,7 +131,101 @@
                                 <small class="mx-4">Due Date: {{ $task->due_date }}</small>
                             </span>
 
+                            <div class="d-flex m-3">
+
+                                <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModalCenter{{ $task->id }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                        fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                        <path
+                                            d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                        <path fill-rule="evenodd"
+                                            d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                                    </svg>
+                                </button>
+
+                                <form action="/task/{{ $task->id }}/delete" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button type="submit" class="btn btn-danger btn-sm ms-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                            <path
+                                                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                                            <path
+                                                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                                        </svg>
+                                    </button>
+                                </form>
+                            </div>
+
                         </h6>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModalCenter{{ $task->id }}" tabindex="-1"
+                            aria-labelledby="exampleModalCenterTitle{{ $task->id }}" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header mx-3">
+                                        <h5 class="modal-title" id="exampleModalCenterTitle{{ $task->id }}">
+                                            Edit Task</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body mx-3">
+                                        <form id="editProjectForm{{ $task->id }}"
+                                            action="/task/{{ $task->id }}/update" method="POST"
+                                            enctype="multipart/form-data">
+                                            @csrf
+                                            @method('PATCH')
+
+                                            <div class="form-group">
+                                                <label>Task Title</label>
+                                                <input type="text" name="title" class="form-control"
+                                                    id="exampleInputEmail1" aria-describedby="emailHelp"
+                                                    value="{{ old('title') ?: $task->title }}">
+                                                @error('title')
+                                                    <p class="text-danger">{{ $message }}</p>
+                                                @enderror
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="start_date">Description:</label>
+                                                <input type="text" name="description" class="form-control"
+                                                    id="description"
+                                                    value="{{ old('description') ?: $task->description }}">
+                                                @error('start_date')
+                                                    <p class="text-danger">{{ $message }}</p>
+                                                @enderror
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="due_date">Due Date</label>
+                                                <input type="date" name="due_date" class="form-control"
+                                                    id="due_date" value="{{ old('due_date') ?: $task->due_date }}">
+                                                @error('due_date')
+                                                    <p class="text-danger">{{ $message }}</p>
+                                                @enderror
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer mx-3">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary"
+                                            onclick="submitForm('{{ $task->id }}')">Save changes</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            function submitForm(projectId) {
+                                // Submit the form associated with the given project ID
+                                document.getElementById('editProjectForm' + projectId).submit();
+                            }
+                        </script>
 
 
                         <!-- Hidden Member Assign form initially -->

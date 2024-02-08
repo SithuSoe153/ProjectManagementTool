@@ -58,4 +58,29 @@ class TaskController extends Controller
 
         return response()->json(['success' => false]);
     }
+
+
+
+    public function update(Task $task)
+    {
+
+        // dd($task);
+        $cleanData = request()->validate([
+            'title' => ['required'],
+            'description' => ['required'],
+            'due_date' => [],
+        ]);
+        $cleanData['user_id'] = $task->user_id;
+        // dd($cleanData);
+        // $cleanData['photo'] = request('photo')->store('/images');
+        $task->update($cleanData);
+
+        return back()->with('success', 'Task Update Successful ' . $cleanData['title']);
+    }
+
+    public function destroy(Task $task)
+    {
+        $task->delete();
+        return back()->with('success', $task->title . ' Deleted Successfully');
+    }
 }

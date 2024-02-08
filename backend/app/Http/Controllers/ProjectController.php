@@ -71,6 +71,12 @@ class ProjectController extends Controller
         return redirect('/')->with('success', 'Project Update Successful ' . $cleanData['title']);
     }
 
+    public function destroy(Project $project)
+    {
+        $project->delete();
+        return back()->with('success', $project->title . ' Deleted Successfully');
+    }
+
     public function create()
     {
         return view('projects.create');

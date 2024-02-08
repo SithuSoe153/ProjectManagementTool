@@ -60,6 +60,12 @@
 
                                             // Toggle the readonly attribute of the input field
                                             inputField.readOnly = !inputField.readOnly;
+
+                                            // Set the selection range to the end of the input field
+                                            inputField.setSelectionRange(inputField.value.length, inputField.value.length);
+
+                                            // Focus on the input field
+                                            inputField.focus();
                                         });
                                     });
                                 });
@@ -67,9 +73,16 @@
 
 
 
+
                             <div class="mb-3">
                                 <label class="form-label">Created at: </label>
                                 <label class="form-label">{{ $user->created_at->diffForHumans() }}</label>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <label class="form-label">Updated at: </label>
+                                <label class="form-label">{{ $user->updated_at->diffForHumans() }}</label>
                             </div>
 
                             <div class="d-grid">

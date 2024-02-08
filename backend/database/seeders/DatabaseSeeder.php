@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Permission;
 use App\Models\Project;
 use App\Models\Role;
 use App\Models\Task;
@@ -21,6 +22,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
+        Permission::factory(8)->create();
         Role::factory(10)->create();
 
         // Create three users with manual data
@@ -74,6 +76,8 @@ class DatabaseSeeder extends Seeder
             'user_id' => $user->first()->id,
             'project_id' => $project1->id,
             'title' => 'Task 1 for ' . $user->first()->name,
+            'description' => 'Task 1 description',
+            'due_date' => now()->addDays(10)->toDateString(),
             // Add other task attributes here
         ]);
 
@@ -81,6 +85,8 @@ class DatabaseSeeder extends Seeder
             'user_id' => $user->first()->id,
             'project_id' => $project1->id,
             'title' => 'Task 2 for ' . $user->first()->name,
+            'description' => 'Task 2 description',
+            // 'due_date' => now()->addDays(10)->toDateString(),
             // Add other task attributes here
         ]);
 
@@ -88,6 +94,8 @@ class DatabaseSeeder extends Seeder
             'user_id' => $user->first()->id,
             'project_id' => $project2->id,
             'title' => 'Task 1 for ' . $user->first()->name,
+            'description' => 'Task 1 description',
+            'due_date' => now()->addDays(10)->toDateString(),
             // Add other task attributes here
         ]);
 
@@ -95,6 +103,8 @@ class DatabaseSeeder extends Seeder
             'user_id' => $user->first()->id,
             'project_id' => $project2->id,
             'title' => 'Task 2 for ' . $user->first()->name,
+            'description' => 'Task 2 description',
+            'due_date' => now()->addDays(10)->toDateString(),
             // Add other task attributes here
         ]);
     }

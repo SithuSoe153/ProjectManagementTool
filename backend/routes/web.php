@@ -23,6 +23,10 @@ Route::middleware('auth-user')->group(function () {
     Route::get('/project/create', [ProjectController::class, 'create']);
     Route::post('/project/store', [ProjectController::class, 'store']);
     Route::patch('/project/{project}/update', [ProjectController::class, 'update']);
+    Route::delete('/project/{project}/delete', [ProjectController::class, 'destroy']);
+
+    Route::patch('/task/{task}/update', [TaskController::class, 'update']);
+    Route::delete('/task/{task}/delete', [TaskController::class, 'destroy']);
 
     Route::post('/project/{project}/task', [TaskController::class, 'store']);
 
