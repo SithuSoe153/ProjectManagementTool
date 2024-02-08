@@ -14,8 +14,9 @@
 
 
             @if (auth()->check())
-                <span class="nav-link">{{ auth()->user()->name }}</span>
+                <a href="/profile/{{ auth()->user()->id }}/edit" class="nav-link">{{ auth()->user()->username }}</a>
             @endif
+
             @if (!auth()->check())
                 <a href="/login" class="nav-link">login</a>
                 <a href="/register" class="nav-link">register</a>

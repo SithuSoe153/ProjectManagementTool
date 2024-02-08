@@ -19,7 +19,8 @@
                             </h5>
                             <p class="card-text">Creator: {{ $project->user->name }}</p>
 
-                            <button type="button" class="btn btn-warning btn-sm">
+                            <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#exampleModalCenter{{ $project->id }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                     fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                     <path
@@ -28,6 +29,7 @@
                                         d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
                                 </svg>
                             </button>
+
                             <button type="button" class="btn btn-danger btn-sm">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                     fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
@@ -38,15 +40,73 @@
                                 </svg>
                             </button>
 
-
-
-
-
-
                         </div>
                     </div>
                 </div>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModalCenter{{ $project->id }}" tabindex="-1"
+                    aria-labelledby="exampleModalCenterTitle{{ $project->id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header mx-3">
+                                <h5 class="modal-title" id="exampleModalCenterTitle{{ $project->id }}">
+                                    Edit Project</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body mx-3">
+                                <form id="editProjectForm{{ $project->id }}"
+                                    action="/project/{{ $project->id }}/update" method="POST"
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    @method('PATCH')
+
+                                    <div class="form-group">
+                                        <label>Project Title</label>
+                                        <input type="text" name="title" class="form-control"
+                                            id="exampleInputEmail1" aria-describedby="emailHelp"
+                                            value="{{ old('title') ?: $project->title }}">
+                                        @error('title')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="start_date">Start Date</label>
+                                        <input type="date" name="start_date" class="form-control" id="start_date"
+                                            value="{{ old('start_date') ?: $project->start_date }}">
+                                        @error('start_date')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="due_date">Due Date</label>
+                                        <input type="date" name="due_date" class="form-control" id="due_date"
+                                            value="{{ old('due_date') ?: $project->due_date }}">
+                                        @error('due_date')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer mx-3">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary"
+                                    onclick="submitForm('{{ $project->id }}')">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    function submitForm(projectId) {
+                        // Submit the form associated with the given project ID
+                        document.getElementById('editProjectForm' + projectId).submit();
+                    }
+                </script>
             @endforeach
+
         </div>
 
 
@@ -72,30 +132,6 @@
         </div>
     </div>
 
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
-        Launch vertically centered modal
-    </button>
-
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalCenterTitle">Vertically Centered Modal</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Your content goes here.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
 </x-layout>

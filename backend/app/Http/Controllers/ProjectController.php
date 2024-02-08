@@ -55,6 +55,22 @@ class ProjectController extends Controller
         return redirect('/')->with('success', 'Project Create Successful ' . $cleanData['title']);
     }
 
+
+    public function update(ProjectRequest $request, Project $project)
+    {
+
+        $cleanData = $request->validated();
+        $cleanData['user_id'] = $request->user()->id;
+        // dd($cleanData);
+        // $cleanData['photo'] = request('photo')->store('/images');
+        $project->update($cleanData);
+
+        // SubscribeNewBlog::all()->each(function ($user) use ($newBlog) {
+        //     Mail::to($user->email)->queue(new Subscriber($newBlog));
+        // });
+        return redirect('/')->with('success', 'Project Update Successful ' . $cleanData['title']);
+    }
+
     public function create()
     {
         return view('projects.create');
