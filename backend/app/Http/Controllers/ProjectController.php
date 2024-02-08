@@ -15,10 +15,13 @@ class ProjectController extends Controller
     public function index()
     {
         $projects = auth()->user()->projects()->latest()->get();
-        // $projects = auth()->user()->projects()->get();
+
+        $assignedProjects = auth()->user()->projectRoleAssignments;
+
 
         return view('projects.index', [
-            'projects' => $projects,
+            'projects' => $projects->load('tasks.users'),
+            'assignedProjects' => $assignedProjects->load('project'),
         ]);
     }
 
@@ -41,7 +44,6 @@ class ProjectController extends Controller
 
     public function store(ProjectRequest $request)
     {
-        dd($request->all());
         $cleanData = $request->validated();
         $cleanData['user_id'] = auth()->id();
         // $cleanData['photo'] = request('photo')->store('/images');
@@ -51,6 +53,28 @@ class ProjectController extends Controller
         //     Mail::to($user->email)->queue(new Subscriber($newBlog));
         // });
         return redirect('/')->with('success', 'Project Create Successful ' . $cleanData['title']);
+    }
+
+
+    public function update(ProjectRequest $request, Project $project)
+    {
+
+        $cleanData = $request->validated();
+        $cleanData['user_id'] = $request->user()->id;
+        // dd($cleanData);
+        // $cleanData['photo'] = request('photo')->store('/images');
+        $project->update($cleanData);
+
+        // SubscribeNewBlog::all()->each(function ($user) use ($newBlog) {
+        //     Mail::to($user->email)->queue(new Subscriber($newBlog));
+        // });
+        return redirect('/')->with('success', 'Project Update Successful ' . $cleanData['title']);
+    }
+
+    public function destroy(Project $project)
+    {
+        $project->delete();
+        return back()->with('success', $project->title . ' Deleted Successfully');
     }
 
     public function create()

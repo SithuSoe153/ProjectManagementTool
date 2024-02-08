@@ -3,11 +3,20 @@
         <a class="navbar-brand" href="/">Project Management</a>
         <div class="d-flex">
             <a href="/" class="nav-link">Home</a>
-            <a href="/#blogs" class="nav-link">Blogs</a>
-            <a href="#subscribe" class="nav-link">Subscribe</a>
+
             @if (auth()->check())
-                <span class="nav-link">{{ auth()->user()->name }}</span>
+                @if (auth()->user()->roles->first()->id == 1)
+                    <a href="#" class="nav-link">Add New User</a>
+                @endif
             @endif
+
+
+
+
+            @if (auth()->check())
+                <a href="/profile/{{ auth()->user()->id }}/edit" class="nav-link">{{ auth()->user()->username }}</a>
+            @endif
+
             @if (!auth()->check())
                 <a href="/login" class="nav-link">login</a>
                 <a href="/register" class="nav-link">register</a>

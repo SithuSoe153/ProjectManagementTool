@@ -16,11 +16,24 @@ class UserRoleFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
+    protected static $sequence = 0;
+
     public function definition(): array
     {
+        $roles = [
+            '1' => '1',
+            '2' => '2',
+
+        ];
+
+        // $name = $this->faker->unique()->randomElement(array_keys($roles));
+        $name = array_keys($roles)[self::$sequence];
+        self::$sequence++;
+
         return [
-            'user_id' => 2,
-            'role_id' => 1,
+            'user_id' => $name,
+            'role_id' => $roles[$name],
         ];
     }
 }

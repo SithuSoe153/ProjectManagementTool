@@ -25,6 +25,9 @@
     {{-- BootStrap --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
 
+    {{-- Font Awesome --}}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+
 
 </head>
 
