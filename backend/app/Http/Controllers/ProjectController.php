@@ -89,7 +89,7 @@ class ProjectController extends Controller
         // Validate the request
         $cleanData = $request->validate([
             'email' => 'required|email',
-            'roles' => 'required|array',
+            'roles' => 'array',
             'roles.*' => 'exists:roles,id',
         ]);
 

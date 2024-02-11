@@ -41,8 +41,10 @@ class AuthController extends Controller
             'name' => ['required'],
             'username' => ['required', Rule::unique('users', 'username')],
             'email' => ['required'],
-            'password' => ['required', 'min:6', 'max:16', 'confirmed']
+            'password' => ['required', 'min:6', 'max:16', 'confirmed'],
+            'photo' => ['image']
         ]);
+        $cleanData['photo'] = request()->file('photo')->store('/images');
 
         $user = User::create($cleanData);
 

@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Http\Request;
+
+use function Symfony\Component\String\b;
 
 class TaskController extends Controller
 {
@@ -82,5 +85,12 @@ class TaskController extends Controller
     {
         $task->delete();
         return back()->with('success', $task->title . ' Deleted Successfully');
+    }
+
+    public function index()
+    {
+        return view('tasks.index', [
+            'tasks' => auth()->user()->tasks,
+        ]);
     }
 }

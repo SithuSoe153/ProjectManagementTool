@@ -21,7 +21,7 @@ class TaskPolicy
 
     public function create_Task(User $user): bool
     {
-        return ($user->hasRole(['Admin']) || $user->hasRole(['Manager']) && $user->hasPermission('create_Task'));
+        return ($user->hasRole(['Admin', 'Manager']) && $user->hasPermission('create_Task'));
     }
 
     public function update_Task(User $user): bool
@@ -34,7 +34,13 @@ class TaskPolicy
         return $user->hasRole(['Admin', 'Manager']) && $user->hasPermission('delete_Task');
     }
 
-    public function check_Task(User $user): bool
+    public function check_Task(User $user, Task $task): bool
+    {
+        $userTask = $task->users()->where('user_id', $user->id)->first();
+        return $userTask ? $userTask->id == $user->id : false;
+    }
+
+    public function view_Task(User $user): bool
     {
         return $user->hasRole(['Admin']) || $user->hasPermission('check_Task');
     }

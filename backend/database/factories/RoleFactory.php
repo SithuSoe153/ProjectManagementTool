@@ -50,10 +50,17 @@ class RoleFactory extends Factory
         return $this->afterCreating(function (Role $role) {
             // Attach specific permissions to the role
             if ($role->name === 'Admin') {
-                $role->permissions()->attach([1, 2, 3, 4, 5]); // Adjust the permission IDs as needed
+                $role->permissions()->attach([1, 2, 3, 4, 5]); // Permission IDs for Tasks
+                $role->permissions()->attach([6, 7, 8, 9]); // Permission IDs for Projects
+                $role->permissions()->attach([10, 11, 12, 13, 14, 15]); // Permission IDs for members
             }
             if ($role->name === 'Manager') {
-                $role->permissions()->attach([1, 2, 3, 4]); // Adjust the permission IDs as needed
+                $role->permissions()->attach([1, 2, 3, 4]); // Permission IDs for Tasks
+                $role->permissions()->attach([7]); // Permission IDs for Projects
+                $role->permissions()->attach([11, 15]); // Permission IDs for members
+            }
+            if ($role->name === 'Employee') {
+                $role->permissions()->attach([2, 5]); // Permission IDs for Tasks
             }
         });
     }
