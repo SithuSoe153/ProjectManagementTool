@@ -44,4 +44,9 @@ class TaskPolicy
     {
         return $user->hasRole(['Admin']) || $user->hasPermission('check_Task');
     }
+
+    public function assign_Member(User $user): bool
+    {
+        return $user->hasRole(['Admin', 'Member']) || $user->hasPermission('assign_Member');
+    }
 }

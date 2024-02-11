@@ -14,7 +14,7 @@
         {{-- employee --}}
 
 
-        <div class="row">
+        <div class="row mt-3">
 
             @foreach ($assignedProjects as $project)
                 <div class="col-md-12 mx-auto">

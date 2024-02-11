@@ -41,4 +41,9 @@ class ProjectPolicy
 
         return $userProject;
     }
+
+    public function add_Member(User $user): bool
+    {
+        return $user->hasRole(['Admin']) && $user->hasPermission('add_Member');
+    }
 }

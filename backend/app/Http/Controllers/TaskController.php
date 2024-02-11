@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use App\Models\Role;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -87,10 +88,83 @@ class TaskController extends Controller
         return back()->with('success', $task->title . ' Deleted Successfully');
     }
 
+    // public function index()
+    // {
+
+    //     $tasks = auth()->user()->tasks->load('project');
+    //     // $project = $tasks->load('project');
+    //     return view('tasks.index', [
+    //         'tasks' => $tasks,
+    //         // 'project' => $project,
+    //         // 'project' => $tasks->first()->project,
+    //         'roles' => Role::all(),
+    //     ]);
+    // }
+
     public function index()
     {
+
+        $tasks = auth()->user()->tasks->load('project');
+
+        // Group tasks by project
+        $groupedTasks = $tasks->groupBy('project_id');
+
         return view('tasks.index', [
-            'tasks' => auth()->user()->tasks,
+            'project' => $tasks->first()->project,
+            'groupedTasks' => $groupedTasks,
+            'roles' => Role::all(),
         ]);
     }
+
+
+    // public function index()
+    // {
+    //     $user = auth()->user();
+    //     $tasks = $user->tasks()->with('project')->get(); // Eager load the project relationship
+
+    //     // Ensure there's at least one task to avoid accessing properties on null
+    //     $firstProject = $tasks->first() ? $tasks->first()->project : null;
+
+    //     return view('tasks.index', [
+    //         'tasks' => $tasks,
+    //         'projects' => $tasks->pluck('project')->unique(), // Assuming you want a list of unique projects from tasks
+    //         'project' => $firstProject,
+    //         'roles' => Role::all(),
+    //     ]);
+    // }
+
+    // public function index()
+    // {
+    //     $user = auth()->user();
+
+    //     // Assuming there's a 'task_user' pivot table for the many-to-many relationship
+    //     // Adjust 'tasks' to match the actual method name in your User model
+    //     $tasks = $user->tasks()->with('project')->get();
+    //     // Assuming each task belongs to a project and you want to list projects separately
+    //     $projects = $user->projects()->distinct()->get(); // Adjust based on your actual relationship/method
+
+    //     return view('tasks.index', [
+    //         'tasks' => $tasks,
+    //         'projects' => $projects,
+    //         'roles' => Role::all(),
+    //     ]);
+    // }
+
+    // public function index()
+    // {
+    //     $user = auth()->user();
+
+    //     // Retrieve all tasks directly associated with the user
+    //     $tasks = $user->tasks()->with('project')->get();
+
+    //     // Extract unique projects from the tasks
+    //     $projects = $tasks->pluck('project')->unique()->values();
+
+    //     // Return the view with the tasks, projects, and roles
+    //     return view('tasks.index', [
+    //         'tasks' => $tasks,
+    //         'projects' => $projects,
+    //         'roles' => Role::all(),
+    //     ]);
+    // }
 }
