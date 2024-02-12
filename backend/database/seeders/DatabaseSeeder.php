@@ -10,8 +10,6 @@ use App\Models\Role;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\UserRole;
-use Database\Factories\TaskUserFactory;
-use Database\Factories\UserRoleFactory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -22,8 +20,9 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
-        Permission::factory(8)->create();
+        Permission::factory(15)->create();
         Role::factory(10)->create();
+
 
         // Create three users with manual data
 
@@ -41,13 +40,14 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('kmd123'),
         ]);
 
-        // User::create([
-        //     'name' => 'User1',
-        //     'email' => 'user1@example.com',
-        //     'password' => bcrypt('password1'),
-        // ]);
+        User::create([
+            'name' => 'Manager8user',
+            'username' => 'Manager_888',
+            'email' => 'manager@example.com',
+            'password' => bcrypt('kmd123'),
+        ]);
 
-        UserRole::factory(2)->create();
+        UserRole::factory(3)->create();
 
         // Fetch all users
         $user =  User::join('user_roles', 'users.id', '=', 'user_roles.user_id')

@@ -33,6 +33,7 @@ class ProjectController extends Controller
         }, 'tasks.users']);
 
         return view('projects.show', [
+            'tasks' => $project->tasks,
             'project' => $project,
             'roles' => Role::all(),
         ]);
@@ -85,42 +86,38 @@ class ProjectController extends Controller
 
     public function storeMembers(Request $request, Project $project)
     {
-
-        // Validate the request
-        $cleanData = $request->validate([
+        // Validate the request for email and optionally for roles
+        $validatedData = $request->validate([
             'email' => 'required|email',
-            'roles' => 'required|array',
+            'roles' => 'sometimes|array',
             'roles.*' => 'exists:roles,id',
         ]);
 
         // Find the user with the provided email
+        $user = User::where('email', $validatedData['email'])->firstOrFail();
 
-        $user = User::where('email', $request['email'])->first();
+        // Determine roles to assign: use provided roles or fetch user's current roles
+        $roleIds = $request->filled('roles') ? $validatedData['roles'] : $user->roles->pluck('id')->toArray();
 
-        // Ensure the user is found
-        if (!$user) {
-            return redirect()->back()->with('error', 'User not found with the provided email.');
+        // Sync roles to ensure user has only specified roles for this project
+        $projectRoleAssignments = $project->project_role_assignments()->where('user_id', $user->id);
+        $existingRoleIds = $projectRoleAssignments->pluck('role_id')->toArray();
+
+        $rolesToAdd = array_diff($roleIds, $existingRoleIds);
+        $rolesToRemove = array_diff($existingRoleIds, $roleIds);
+
+        foreach ($rolesToAdd as $roleId) {
+            $project->project_role_assignments()->create([
+                'user_id' => $user->id,
+                'role_id' => $roleId,
+                'assign_user_id' => auth()->id(),
+            ]);
         }
 
-        // Create or update members in the database
-        foreach ($request->input('roles') as $roleId) {
-            // Check if the assignment already exists
-            $existingAssignment = ProjectRoleAssignment::where('project_id', $project->id)
-                ->where('user_id', $user->id)
-                ->where('role_id', $roleId)
-                ->exists();
-
-            if (!$existingAssignment) {
-                // Create a new assignment only if it doesn't exist
-                $project->project_role_assignments()->create([
-                    'project_id' => $project->id,
-                    'user_id' => $user->id,
-                    'role_id' => $roleId,
-                    'assign_user_id' => auth()->id(),
-                ]);
-            }
+        if (!empty($rolesToRemove)) {
+            $projectRoleAssignments->whereIn('role_id', $rolesToRemove)->delete();
         }
 
-        return redirect()->back()->with('success', 'Members added successfully.');
+        return redirect()->back()->with('success', 'Members updated successfully.');
     }
 }

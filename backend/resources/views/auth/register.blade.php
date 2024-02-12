@@ -5,7 +5,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h3 class="card-title text-center mb-4">Create Your Account</h3>
-                        <form action="/register" method="POST">
+                        <form action="/register" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="mb-3">
                                 <label for="name" class="form-label">Name:</label>
@@ -43,6 +43,16 @@
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
+
+                            <div class="mb-3">
+                                <label for="formFile" class="form-label">Profile Picture</label>
+                                <input class="form-control" type="file" id="formFile" name="photo">
+                                @error('photo')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-primary">Register</button>
                             </div>

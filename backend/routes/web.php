@@ -6,19 +6,19 @@ use App\Http\Controllers\TaskController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
-
+Route::view('/test', 'test');
 
 Route::middleware('auth-user')->group(function () {
 
     Route::get('/profile/{user}/edit', [User::class, 'show']);
     Route::patch('/profile/{user}/update', [AuthController::class, 'update']);
 
-    Route::get('/task/toggle-completed/{task}', [TaskController::class, 'toggleCompleted']);
+    Route::post('/task/toggle-completed/{task}', [TaskController::class, 'toggleCompleted']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::get('/', [ProjectController::class, 'index']);
-    Route::get('/projects/{project}', [ProjectController::class, 'show']);
+    Route::get('/projects/{project}', [ProjectController::class, 'show'])->middleware('can:view_Project,project');
 
     Route::get('/project/create', [ProjectController::class, 'create']);
     Route::post('/project/store', [ProjectController::class, 'store']);
@@ -32,8 +32,10 @@ Route::middleware('auth-user')->group(function () {
 
     Route::post('/project/{project}/member', [ProjectController::class, 'storeMembers']);
 
-    Route::post('/task/{task}/assign-members', [TaskController::class, 'assignMembers'])
-        ->name('task.assignMembers');
+    Route::post('/task/{task}/assign-members', [TaskController::class, 'assignMembers'])->name('task.assignMembers');
+
+    Route::get('/user/tasks', [TaskController::class, 'index']);
+
     // Route::post('/blogs/{blog:slug}/comments', [CommentController::class, 'store']);
     // Route::post('/blogs/{blog:slug}/subscribe', [subscribeController::class, 'subscribe'])->name('blogs.toggle');
     // Route::delete('/blogs/comments/delete/{comment}', [CommentController::class, 'delete'])->middleware('can:delete,comment');

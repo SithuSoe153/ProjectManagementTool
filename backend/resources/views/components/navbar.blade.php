@@ -11,11 +11,17 @@
             @endif
 
 
+            <a href="/user/tasks" class="nav-link">Assigned Task</a>
 
 
             @if (auth()->check())
-                <a href="/profile/{{ auth()->user()->id }}/edit" class="nav-link">{{ auth()->user()->username }}</a>
+                <a href="/profile/{{ auth()->user()->id }}/edit" class="nav-link">{{ auth()->user()->username }}
+                    <img src=" /storage/{{ auth()->user()->photo ?: 'images/default.jpg' }}"
+                        style="width: 25px; height: 25px" class="img-fluid">
+                </a>
             @endif
+
+
 
             @if (!auth()->check())
                 <a href="/login" class="nav-link">login</a>

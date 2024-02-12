@@ -14,6 +14,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
     <link rel="stylesheet" href="{{ asset('/app.css') }}">
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/js/multi-select-tag.js"></script>
 
@@ -50,10 +51,6 @@
 
     <x-footer />
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous">
-    </script>
-
 
 
     @if (session('toast'))
@@ -66,6 +63,52 @@
         {{-- Optionally, clear the message after showing it to prevent it from reappearing on refresh --}}
         @php session()->forget('toast'); @endphp
     @endif
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous">
+    </script>
+
+
+
+    <script>
+        $(document).ready(function() {
+            $('.task-checkbox').click(function(event) {
+                event.preventDefault();
+
+                var checkbox = $(this);
+                var taskId = checkbox.val();
+
+                $.ajax({
+                    url: '/task/toggle-completed/' + taskId,
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        console.log("success");
+                        console.log(response.task.is_completed);
+
+                        // Toggle checkbox state based on task completion status
+                        checkbox.prop('checked', response.task.is_completed);
+
+                        // Update corresponding task text styling
+                        var taskContainer = checkbox.closest('.task-container');
+                        var taskText = taskContainer.find('.task-text');
+                        if (response.task.is_completed) {
+                            taskText.addClass('task-completed');
+                        } else {
+                            taskText.removeClass('task-completed');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log("fail");
+                        // Handle error
+                    }
+                });
+            });
+        });
+    </script>
 
 
 </body>
