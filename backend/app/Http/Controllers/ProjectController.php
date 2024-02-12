@@ -33,6 +33,7 @@ class ProjectController extends Controller
         }, 'tasks.users']);
 
         return view('projects.show', [
+            'tasks' => $project->tasks,
             'project' => $project,
             'roles' => Role::all(),
         ]);

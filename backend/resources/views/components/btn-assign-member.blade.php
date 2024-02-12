@@ -7,3 +7,39 @@
     </svg>
 
 </a>
+
+<!-- Hidden Member Assign form initially -->
+<div class="container
+col-8" id="assignForm-{{ $task->id }}" style="display: none;">
+    <div class="card-body">
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var membersSelect = new MultiSelectTag('members_{{ $task->id }}');
+            });
+        </script>
+        {{-- <div class="card"> --}}
+        <form action="{{ route('task.assignMembers', $task->id) }}" method="POST" class="card-body"
+            id="assignMemberForm">
+            @csrf
+            <div class="form-group">
+                <h6 class="card-title">Assign Member</h6>
+            </div>
+            {{ $project->project_role_assignments->unique('user_id')->count() ? '' : 'No members assigned yet' }}
+
+            <div class="form-group">
+                <select name="members[]" id="members_{{ $task->id }}" multiple required aria-required="true">
+                    {{-- Populate options from roles table --}}
+                    @foreach ($project->project_role_assignments->unique('user_id') as $assignment)
+                        <option value="{{ $assignment->user->id }}">
+                            {{ $assignment->user->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-success my-3">Assign
+                Members</button>
+        </form>
+        {{-- </div> --}}
+    </div>
+
+</div>

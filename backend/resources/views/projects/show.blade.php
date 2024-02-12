@@ -9,7 +9,7 @@
 
 
         {{-- Task Section Start --}}
-        <x-task-card :project="$project" />
+        <x-task-card :project="$project" :tasks="$tasks" />
         {{-- Task Section End --}}
     </div>
 
@@ -41,44 +41,44 @@
     // Toogle Script End
 
 
-    // CheckBox Script query, toast Start
-    document.querySelectorAll('.task-checkbox').forEach(function(checkbox) {
-        checkbox.addEventListener('change', function() {
-            var taskId = this.getAttribute(
-                'value'); // Assuming the checkbox has a value attribute with the task ID
-            var taskText = this.parentElement.querySelector('.task-text');
-            if (this.checked) {
-                taskText.classList.add('task-completed');
-                // Correct URL construction for route model binding
+    // // CheckBox Script query, toast Start
+    // document.querySelectorAll('.task-checkbox').forEach(function(checkbox) {
+    //     checkbox.addEventListener('change', function() {
+    //         var taskId = this.getAttribute(
+    //             'value'); // Assuming the checkbox has a value attribute with the task ID
+    //         var taskText = this.parentElement.querySelector('.task-text');
+    //         if (this.checked) {
+    //             taskText.classList.add('task-completed');
+    //             // Correct URL construction for route model binding
 
-                document.addEventListener('DOMContentLoaded', function() {
-                    // Check if there's a Laravel session flash message for the toast
-                    @if (session('toast'))
-                        console.log('oka');
-                        const toastLiveExample = document.getElementById('liveToast');
-                        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(
-                            toastLiveExample);
-                        toastBootstrap.show();
+    //             document.addEventListener('DOMContentLoaded', function() {
+    //                 // Check if there's a Laravel session flash message for the toast
+    //                 @if (session('toast'))
+    //                     console.log('oka');
+    //                     const toastLiveExample = document.getElementById('liveToast');
+    //                     const toastBootstrap = bootstrap.Toast.getOrCreateInstance(
+    //                         toastLiveExample);
+    //                     toastBootstrap.show();
 
-                        // Optionally, clear the message after showing it to prevent it from reappearing on refresh
-                        @php session()->forget('toast'); @endphp
-                    @endif
-                });
+    //                     // Optionally, clear the message after showing it to prevent it from reappearing on refresh
+    //                     @php session()->forget('toast'); @endphp
+    //                 @endif
+    //             });
 
-                window.location.href = '/task/toggle-completed/' + taskId;
+    //             window.location.href = '/task/toggle-completed/' + taskId;
 
 
-            } else {
-                taskText.classList.remove('task-completed');
+    //         } else {
+    //             taskText.classList.remove('task-completed');
 
-                // const toastLiveExample = document.getElementById('liveToast')
-                // const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
-                // toastBootstrap.show()
-                // Optionally handle the uncheck action differently
-                window.location.href = '/task/toggle-completed/' + taskId;
-            }
-        });
-    });
+    //             // const toastLiveExample = document.getElementById('liveToast')
+    //             // const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+    //             // toastBootstrap.show()
+    //             // Optionally handle the uncheck action differently
+    //             window.location.href = '/task/toggle-completed/' + taskId;
+    //         }
+    //     });
+    // });
     // CheckBox Script query, toast Start
 
     var rolesSelect = new MultiSelectTag('roles');

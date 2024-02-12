@@ -2,78 +2,74 @@
 
 <div>
 
-
-    @can('create_Task', $project)
+    @can('create_Task', App\Models\Task::class)
         <div class="mb-3">
             <a href="#" class="btn btn-danger" onclick="toggleFormTask()">Add Task</a>
         </div>
+
+
+        {{-- Hidden Add Task form initially --}}
+        <div id="taskForm" style="display: none;">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <form action="/project/{{ $project->id }}/task" method="POST">
+                        @csrf
+                        <h5 class="card-title">Add Task</h5>
+                        <div class="mb-3">
+                            <label for="title">Title:</label>
+                            <input type="text" class="form-control" id="title" name="title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description">Description:</label>
+                            <textarea class="form-control" id="description" name="description" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="due_date">Due Date:</label>
+                            <input type="date" class="form-control" id="due_date" name="due_date" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+            </div>
+            <hr>
+        </div>
     @endcan
 
-
-    {{-- Hidden Add Task form initially --}}
-    <div id="taskForm" style="display: none;">
-        <div class="card mb-3">
-            <div class="card-body">
-                <form action="/project/{{ $project->id }}/task" method="POST">
-                    @csrf
-                    <h5 class="card-title">Add Task</h5>
-                    <div class="mb-3">
-                        <label for="title">Title:</label>
-                        <input type="text" class="form-control" id="title" name="title" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="description">Description:</label>
-                        <textarea class="form-control" id="description" name="description" required></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="due_date">Due Date:</label>
-                        <input type="date" class="form-control" id="due_date" name="due_date" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </form>
-            </div>
-        </div>
-        <hr>
-    </div>
 
     {{-- Tasks List --}}
 
     <ul class="list-group">
         {{-- CheckBox and Text Title Start --}}
-        @forelse ($project->tasks as $task)
+        @forelse ($tasks as $task)
 
             <div class="card my-2">
 
                 <h6 class="card-header">
 
-                    <input {{ $task->is_completed ? 'checked' : '' }} class="form-check-input task-checkbox ms-0 me-2"
-                        value="{{ $task->id }}" type="checkbox" value="" id="task-{{ $task->id }}"
-                        @can('check_Task', $task) disabled @endcan>
+                    <div class="task-container" data-task-id="{{ $task->id }}">
 
+                        <input {{ $task->is_completed ? 'checked' : '' }}
+                            class="form-check-input task-checkbox ms-0 me-2" value="{{ $task->id }}" type="checkbox"
+                            id="task-{{ $task->id }}" @cannot('check_Task', $task) disabled @endcannot>
 
-                    <span class="task-text {{ $task->is_completed ? 'task-completed' : '' }}">
+                        <span class="task-text  {{ $task->is_completed ? 'task-completed' : '' }}">
+                            {{ $task->title }}
+                            |
+                            @foreach ($task->users as $user)
+                                {{ $user->name }}
+                            @endforeach
+                        </span>
+                        @if (!$task->is_completed)
+                            @can('assign_Member', $task)
+                                <x-btn-assign-member :project='$project' :task="$task" />
+                            @endcan
+                        @endif
+                        <br>
+                        <span>
+                            <small class="mx-4">Due Date: {{ $task->due_date }}</small>
+                        </span>
+                    </div>
 
-                        {{ $task->title }}
-                        |
-
-                        @foreach ($task->users as $user)
-                            {{ $user->name }}
-                        @endforeach
-
-                    </span>
-
-                    @if (!$task->is_completed)
-                        @can('assign_Member', $task)
-                            <x-btn-assign-member :task="$task" />
-                        @endcan
-                    @endif
-
-
-                    <br>
-
-                    <span class="task-text {{ $task->is_completed ? 'task-completed' : '' }}">
-                        <small class="mx-4">Due Date: {{ $task->due_date }}</small>
-                    </span>
 
                     @can('update_Task', $task)
                         <div class="d-flex m-3">
@@ -174,43 +170,7 @@
                 </script>
 
 
-                <!-- Hidden Member Assign form initially -->
-                <div class="container
-                        col-8" id="assignForm-{{ $task->id }}"
-                    style="display: none;">
-                    <div class="card-body">
-                        <script>
-                            document.addEventListener("DOMContentLoaded", function() {
-                                var membersSelect = new MultiSelectTag('members_{{ $task->id }}');
-                            });
-                        </script>
-                        {{-- <div class="card"> --}}
-                        <form action="{{ route('task.assignMembers', $task->id) }}" method="POST" class="card-body"
-                            id="assignMemberForm">
-                            @csrf
-                            <div class="form-group">
-                                <h6 class="card-title">Assign Member</h6>
-                            </div>
-                            {{ $project->project_role_assignments->unique('user_id')->count() ? '' : 'No members assigned yet' }}
 
-                            <div class="form-group">
-                                <select name="members[]" id="members_{{ $task->id }}" multiple required
-                                    aria-required="true">
-                                    {{-- Populate options from roles table --}}
-                                    @foreach ($project->project_role_assignments->unique('user_id') as $assignment)
-                                        <option value="{{ $assignment->user->id }}">
-                                            {{ $assignment->user->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <button type="submit" class="btn btn-success my-3">Assign
-                                Members</button>
-                        </form>
-                        {{-- </div> --}}
-                    </div>
-
-                </div>
 
 
 
@@ -262,4 +222,7 @@
 
     </ul>
 </div>
+
+
+
 {{-- Task Section End --}}

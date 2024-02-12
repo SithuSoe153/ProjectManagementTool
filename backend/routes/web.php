@@ -6,12 +6,14 @@ use App\Http\Controllers\TaskController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
+Route::view('/test', 'test');
+
 Route::middleware('auth-user')->group(function () {
 
     Route::get('/profile/{user}/edit', [User::class, 'show']);
     Route::patch('/profile/{user}/update', [AuthController::class, 'update']);
 
-    Route::get('/task/toggle-completed/{task}', [TaskController::class, 'toggleCompleted']);
+    Route::post('/task/toggle-completed/{task}', [TaskController::class, 'toggleCompleted']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
