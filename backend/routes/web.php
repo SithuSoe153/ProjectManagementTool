@@ -10,6 +10,9 @@ Route::view('/test', 'test');
 
 Route::middleware('auth-user')->group(function () {
 
+    Route::post('/update-task-positions', [TaskController::class, 'updateTaskPositions']);
+
+
     Route::get('/profile/{user}/edit', [User::class, 'show']);
     Route::patch('/profile/{user}/update', [AuthController::class, 'update']);
 

@@ -35,16 +35,17 @@
         </div>
     @endcan
 
-
     {{-- Tasks List --}}
 
-    <ul class="list-group">
+
+    <ul class="list-group" id="sortable">
+
         {{-- CheckBox and Text Title Start --}}
         @forelse ($tasks as $task)
-
             <div class="card my-2">
 
-                <h6 class="card-header">
+
+                <div class="card-header ui-state-default">
 
                     <div class="task-container" data-task-id="{{ $task->id }}">
 
@@ -103,7 +104,9 @@
                         </div>
                     @endcan
 
-                </h6>
+                </div>
+
+
 
                 <!-- Modal -->
                 <div class="modal fade" id="exampleModalCenter{{ $task->id }}" tabindex="-1"
@@ -162,21 +165,16 @@
                     </div>
                 </div>
 
-                <script>
+                {{-- <script>
                     function submitForm(projectId) {
                         // Submit the form associated with the given project ID
                         document.getElementById('editProjectForm' + projectId).submit();
                     }
-                </script>
-
-
-
-
+                </script> --}}
 
 
                 {{-- CheckBox and Text Title End --}}
             </div>
-
 
 
             {{-- <hr> --}}
@@ -217,7 +215,6 @@
         {{-- Toast Session Check End --}}
 
         {{-- CheckBox and Text Title End --}}
-
 
 
     </ul>

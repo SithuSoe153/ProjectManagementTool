@@ -1,32 +1,38 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>jQuery Example</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $(".task-checkbox").click(function() {
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>jQuery UI Sortable - Drop placeholder</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
 
-                // $("p").text("Hello, jQuery!");
-                console.log("Hello, jQuery!");
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script>
+        $(function() {
+            $("#sortable").sortable({
+                placeholder: "ui-state-highlight"
             });
+            $("#sortable").disableSelection();
         });
     </script>
 </head>
 
 <body>
 
-    <form action="">
+    <ul id="sortable">
+        <li class="ui-state-default">Item 1 <p>Okay</p>
+        </li>
+        <li class="ui-state-default">Item 2</li>
+        <li class="ui-state-default">Item 3</li>
+        <li class="ui-state-default">Item 4</li>
+        <li class="ui-state-default">Item 5</li>
+        <li class="ui-state-default">Item 6</li>
+        <li class="ui-state-default">Item 7</li>
+    </ul>
 
-        <input class="form-check-input task-checkbox ms-0 me-2" value="" type="checkbox" id="">
-
-    </form>
-
-    {{-- <button>Click me</button> --}}
-    <p></p>
 
 </body>
 

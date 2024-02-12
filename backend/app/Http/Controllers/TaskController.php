@@ -12,6 +12,21 @@ use function Symfony\Component\String\b;
 
 class TaskController extends Controller
 {
+
+    public function updateTaskPositions(Request $request)
+    {
+        $taskIds = $request->input('taskIds');
+
+        // Update task positions in the database
+        foreach ($taskIds as $index => $taskId) {
+            Task::where('id', $taskId)->update(['position' => $index + 1]);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+
+
     public function store(Project $project)
     {
         $cleanData = request()->validate([
@@ -48,22 +63,6 @@ class TaskController extends Controller
         // Redirect or return a response
     }
 
-    // public function toggleCompleted(Request $request)
-    // {
-    //     dd($request->all());
-    //     $taskId = $request->task;
-    //     $task = Task::find($taskId);
-    //     if ($task) {
-    //         $task->is_completed = !$task->is_completed;
-    //         $task->save();
-    //         return response()->json(['success' => true]);
-    //         // return back()->with('toast', 'Complete Task');
-    //     }
-
-    //     return response()->json(['success' => false]);
-    // }
-
-
     public function toggleCompleted(Request $request)
     {
         $task = Task::find($request->task);
@@ -78,8 +77,6 @@ class TaskController extends Controller
 
         return response()->json(['success' => true, 'task' => $task]);
     }
-
-
 
 
     public function update(Task $task)
@@ -105,35 +102,6 @@ class TaskController extends Controller
         return back()->with('success', $task->title . ' Deleted Successfully');
     }
 
-    // public function index()
-    // {
-
-    //     $tasks = auth()->user()->tasks->load('project');
-    //     // $project = $tasks->load('project');
-    //     return view('tasks.index', [
-    //         'tasks' => $tasks,
-    //         // 'project' => $project,
-    //         // 'project' => $tasks->first()->project,
-    //         'roles' => Role::all(),
-    //     ]);
-    // }
-
-    // public function index()
-    // {
-
-    //     $tasks = auth()->user()->tasks->load('project');
-
-    //     // Group tasks by project
-    //     $groupedTasks = $tasks->groupBy('project_id');
-
-    //     return view('tasks.index', [
-    //         'project' => $tasks->first()->project,
-    //         'groupedTasks' => $groupedTasks,
-    //         'roles' => Role::all(),
-    //     ]);
-    // }
-
-
     public function index()
     {
         // Retrieve tasks associated with the authenticated user
@@ -152,63 +120,9 @@ class TaskController extends Controller
 
 
         return view('tasks.index', [
-            // 'project' => $tasks->first()->project->tasks->first()->users->first()->id,
             'project' => $tasks->load('users'),
             'groupedTasks' => $groupedTasks,
             'roles' => Role::all(),
         ]);
     }
-
-
-
-    // public function index()
-    // {
-    //     $user = auth()->user();
-    //     $tasks = $user->tasks()->with('project')->get(); // Eager load the project relationship
-
-    //     // Ensure there's at least one task to avoid accessing properties on null
-    //     $firstProject = $tasks->first() ? $tasks->first()->project : null;
-
-    //     return view('tasks.index', [
-    //         'tasks' => $tasks,
-    //         'projects' => $tasks->pluck('project')->unique(), // Assuming you want a list of unique projects from tasks
-    //         'project' => $firstProject,
-    //         'roles' => Role::all(),
-    //     ]);
-    // }
-
-    // public function index()
-    // {
-    //     $user = auth()->user();
-
-    //     // Assuming there's a 'task_user' pivot table for the many-to-many relationship
-    //     // Adjust 'tasks' to match the actual method name in your User model
-    //     $tasks = $user->tasks()->with('project')->get();
-    //     // Assuming each task belongs to a project and you want to list projects separately
-    //     $projects = $user->projects()->distinct()->get(); // Adjust based on your actual relationship/method
-
-    //     return view('tasks.index', [
-    //         'tasks' => $tasks,
-    //         'projects' => $projects,
-    //         'roles' => Role::all(),
-    //     ]);
-    // }
-
-    // public function index()
-    // {
-    //     $user = auth()->user();
-
-    //     // Retrieve all tasks directly associated with the user
-    //     $tasks = $user->tasks()->with('project')->get();
-
-    //     // Extract unique projects from the tasks
-    //     $projects = $tasks->pluck('project')->unique()->values();
-
-    //     // Return the view with the tasks, projects, and roles
-    //     return view('tasks.index', [
-    //         'tasks' => $tasks,
-    //         'projects' => $projects,
-    //         'roles' => Role::all(),
-    //     ]);
-    // }
 }

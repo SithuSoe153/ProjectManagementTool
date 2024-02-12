@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -29,6 +30,9 @@
     {{-- Font Awesome --}}
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
 
+    {{-- sortable --}}
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
 </head>
 
@@ -69,6 +73,52 @@
         integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous">
     </script>
 
+
+
+    <script>
+        $(function() {
+            $("#sortable").sortable({
+                placeholder: "ui-state-highlight"
+            });
+            $("#sortable").disableSelection();
+        });
+
+
+
+        //
+
+        $(function() {
+            $("#sortable").sortable({
+                update: function(event, ui) {
+                    var taskIds = [];
+                    $("#sortable .task-container").each(function() {
+                        taskIds.push($(this).data("task-id"));
+                    });
+
+                    // Send AJAX request to update task positions
+                    $.ajax({
+                        url: "/update-task-positions",
+                        method: "POST",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                                'content') // Include CSRF token in headers
+                        },
+                        data: {
+                            taskIds: taskIds
+                        },
+                        success: function(response) {
+                            // Handle success if needed
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(error);
+                        }
+                    });
+
+
+                }
+            });
+        });
+    </script>
 
 
     <script>
