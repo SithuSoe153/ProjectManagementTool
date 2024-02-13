@@ -21,8 +21,6 @@ io.on("connection", (socket) => {
     });
 
     socket.on("sendChatToServer", () => {
-        console.log("Testing");
-
         io.sockets.emit("sendChatToServer");
         // socket.broadcast.emit("sendChatToServer");
     });
@@ -34,6 +32,10 @@ io.on("connection", (socket) => {
         io.sockets.emit("taskPositionUpdated", taskIds); // Broadcast the event to all clients
     });
 
+    // Emit Socket.io event when a task position is updated
+    socket.on("updateCheckedTask", (taskId) => {
+        io.sockets.emit("checkedTaskUpdated", taskId); // Broadcast the event to all clients
+    });
     // // Emit Socket.io event when a task is updated
     // socket.on("updateTask", (taskId) => {
     //     io.sockets.emit("taskUpdated", taskId); // Broadcast the event to all clients

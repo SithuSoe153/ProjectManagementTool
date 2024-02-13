@@ -74,7 +74,7 @@ class TaskController extends Controller
             'is_completed' => !$task->is_completed,
         ]);
 
-        return response()->json(['success' => true, 'task' => $task, 'toast' => 'Task completed successfully']);
+        return response()->json(['success' => true, 'task' => $task]);
     }
 
 

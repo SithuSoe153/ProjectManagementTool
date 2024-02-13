@@ -117,6 +117,65 @@
             taskElements.forEach(taskElement => taskContainer.appendChild(taskElement));
         });
 
+        // Listen for task position update event
+        socket.on('checkedTaskUpdated', (taskId) => {
+            console.log(taskId);
+
+            // Find the checkbox element based on taskId
+            var checkbox = $('#task-' + taskId);
+
+            // Toggle checkbox state based on task completion status
+            checkbox.prop('checked', !checkbox.prop('checked'));
+
+            // Update corresponding task text styling
+            var taskContainer = checkbox.closest('.task-container');
+            var taskText = taskContainer.find('.task-text');
+            if (checkbox.prop('checked')) {
+                taskText.addClass('task-completed');
+            } else {
+                taskText.removeClass('task-completed');
+            }
+
+
+
+            // if (response.toast) {
+            // Create a new toast element
+            const newToast = document.createElement('div');
+            newToast.className = 'toast';
+            newToast.setAttribute('role', 'alert');
+            newToast.setAttribute('aria-live', 'assertive');
+            newToast.setAttribute('aria-atomic', 'true');
+
+            // Create the toast header
+            const toastHeader = document.createElement('div');
+            toastHeader.className = 'toast-header';
+            toastHeader.innerHTML = `
+                                                            <i class="fas fa-bell me-2"></i>
+                                                            <strong class="me-auto">Success</strong>
+                                                            <small>now</small>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                                                        `;
+
+            // Create the toast body
+            const toastBody = document.createElement('div');
+            toastBody.className = 'toast-body';
+            toastBody.textContent = 'Task Successfully';
+
+            // Append header and body to the toast element
+            newToast.appendChild(toastHeader);
+            newToast.appendChild(toastBody);
+
+            // Append the new toast to the toast container
+            const toastContainer = document.querySelector('.toast-container');
+            toastContainer.appendChild(newToast);
+
+            // Show the new toast
+            const newToastInstance = new bootstrap.Toast(newToast);
+            newToastInstance.show();
+            // }
+        });
+
+
 
 
 
@@ -140,12 +199,14 @@
                         data: {
                             taskIds: taskIds
                         },
-                        success: function(response) {},
+                        success: function(response) {
+                            socket.emit('updateTaskPosition', taskIds);
+
+                        },
                         error: function(xhr, status, error) {
                             console.error(error);
                         }
                     });
-                    socket.emit('updateTaskPosition', taskIds);
 
 
                 }
@@ -169,20 +230,8 @@
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(response) {
-                        console.log("success");
-                        console.log(response.task.is_completed);
 
-                        // Toggle checkbox state based on task completion status
-                        checkbox.prop('checked', response.task.is_completed);
-
-                        // Update corresponding task text styling
-                        var taskContainer = checkbox.closest('.task-container');
-                        var taskText = taskContainer.find('.task-text');
-                        if (response.task.is_completed) {
-                            taskText.addClass('task-completed');
-                        } else {
-                            taskText.removeClass('task-completed');
-                        }
+                        socket.emit('updateCheckedTask', taskId);
 
                         // if (response.toast) {
                         //     const toastLiveExample = document.getElementById('liveToast');
@@ -190,43 +239,6 @@
                         //         toastLiveExample);
                         //     toastBootstrap.show();
                         // }
-
-
-                        if (response.toast) {
-                            // Create a new toast element
-                            const newToast = document.createElement('div');
-                            newToast.className = 'toast';
-                            newToast.setAttribute('role', 'alert');
-                            newToast.setAttribute('aria-live', 'assertive');
-                            newToast.setAttribute('aria-atomic', 'true');
-
-                            // Create the toast header
-                            const toastHeader = document.createElement('div');
-                            toastHeader.className = 'toast-header';
-                            toastHeader.innerHTML = `
-                                                            <i class="fas fa-bell me-2"></i>
-                                                            <strong class="me-auto">Success</strong>
-                                                            <small>now</small>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                                                        `;
-
-                            // Create the toast body
-                            const toastBody = document.createElement('div');
-                            toastBody.className = 'toast-body';
-                            toastBody.textContent = 'Task Successfully';
-
-                            // Append header and body to the toast element
-                            newToast.appendChild(toastHeader);
-                            newToast.appendChild(toastBody);
-
-                            // Append the new toast to the toast container
-                            const toastContainer = document.querySelector('.toast-container');
-                            toastContainer.appendChild(newToast);
-
-                            // Show the new toast
-                            const newToastInstance = new bootstrap.Toast(newToast);
-                            newToastInstance.show();
-                        }
 
 
 

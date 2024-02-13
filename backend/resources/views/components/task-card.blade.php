@@ -165,12 +165,12 @@
                     </div>
                 </div>
 
-                {{-- <script>
+                <script>
                     function submitForm(projectId) {
                         // Submit the form associated with the given project ID
                         document.getElementById('editProjectForm' + projectId).submit();
                     }
-                </script> --}}
+                </script>
 
 
                 {{-- CheckBox and Text Title End --}}
