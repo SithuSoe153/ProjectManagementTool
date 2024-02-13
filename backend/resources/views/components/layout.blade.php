@@ -34,6 +34,11 @@
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
+    {{-- socket cdn --}}
+    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"
+        integrity="sha384-Gr6Lu2Ajx28mzwyVR8CFkULdCU7kMlZ9UthllibdOSo6qAiN+yXNHqtgdTvFXMT4" crossorigin="anonymous">
+    </script>
+
 </head>
 
 <body id="home">
@@ -56,7 +61,7 @@
     <x-footer />
 
 
-
+    {{-- Toast Session Check Start --}}
     @if (session('toast'))
         <script>
             const toastLiveExample = document.getElementById('liveToast');
@@ -67,6 +72,7 @@
         {{-- Optionally, clear the message after showing it to prevent it from reappearing on refresh --}}
         @php session()->forget('toast'); @endphp
     @endif
+    {{-- Toast Session Check End --}}
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
@@ -87,6 +93,34 @@
 
         //
 
+
+        let ip_address = 'http://127.0.0.1:3000';
+        let socket = io(ip_address);
+        socket.on('connection');
+
+        //
+
+        // Listen for task position update event
+        socket.on('taskPositionUpdated', (taskIds) => {
+            console.log(taskIds);
+            // Get the parent container of tasks
+            const taskContainer = document.getElementById('sortable');
+            // Get the array of all task elements
+            const taskElements = Array.from(taskContainer.querySelectorAll('.card'));
+            // Sort the task elements based on their taskId order
+            taskElements.sort((a, b) => {
+                const taskIdA = parseInt(a.querySelector('.task-container').getAttribute('data-task-id'));
+                const taskIdB = parseInt(b.querySelector('.task-container').getAttribute('data-task-id'));
+                return taskIds.indexOf(taskIdA) - taskIds.indexOf(taskIdB);
+            });
+            // Append the sorted task elements back to the task container
+            taskElements.forEach(taskElement => taskContainer.appendChild(taskElement));
+        });
+
+
+
+
+        //
         $(function() {
             $("#sortable").sortable({
                 update: function(event, ui) {
@@ -106,13 +140,12 @@
                         data: {
                             taskIds: taskIds
                         },
-                        success: function(response) {
-                            // Handle success if needed
-                        },
+                        success: function(response) {},
                         error: function(xhr, status, error) {
                             console.error(error);
                         }
                     });
+                    socket.emit('updateTaskPosition', taskIds);
 
 
                 }
@@ -150,6 +183,53 @@
                         } else {
                             taskText.removeClass('task-completed');
                         }
+
+                        // if (response.toast) {
+                        //     const toastLiveExample = document.getElementById('liveToast');
+                        //     const toastBootstrap = bootstrap.Toast.getOrCreateInstance(
+                        //         toastLiveExample);
+                        //     toastBootstrap.show();
+                        // }
+
+
+                        if (response.toast) {
+                            // Create a new toast element
+                            const newToast = document.createElement('div');
+                            newToast.className = 'toast';
+                            newToast.setAttribute('role', 'alert');
+                            newToast.setAttribute('aria-live', 'assertive');
+                            newToast.setAttribute('aria-atomic', 'true');
+
+                            // Create the toast header
+                            const toastHeader = document.createElement('div');
+                            toastHeader.className = 'toast-header';
+                            toastHeader.innerHTML = `
+                                                            <i class="fas fa-bell me-2"></i>
+                                                            <strong class="me-auto">Success</strong>
+                                                            <small>now</small>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                                                        `;
+
+                            // Create the toast body
+                            const toastBody = document.createElement('div');
+                            toastBody.className = 'toast-body';
+                            toastBody.textContent = 'Task Successfully';
+
+                            // Append header and body to the toast element
+                            newToast.appendChild(toastHeader);
+                            newToast.appendChild(toastBody);
+
+                            // Append the new toast to the toast container
+                            const toastContainer = document.querySelector('.toast-container');
+                            toastContainer.appendChild(newToast);
+
+                            // Show the new toast
+                            const newToastInstance = new bootstrap.Toast(newToast);
+                            newToastInstance.show();
+                        }
+
+
+
                     },
                     error: function(xhr, status, error) {
                         console.log("fail");

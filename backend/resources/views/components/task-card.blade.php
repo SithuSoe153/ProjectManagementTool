@@ -184,35 +184,10 @@
             <p>No Tasks Here</p>
         @endforelse
 
+
         <!-- Hidden Toast form initially -->
-        <div class="toast-container position-fixed bottom-0 end-0 p-3">
-            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-header">
 
-                    <i class="fas fa-bell me-2"></i>
 
-                    <strong class="me-auto">{{ session('toast') }}</strong>
-                    <small>now</small>
-                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-                <div class="toast-body">
-                    {{ session('toast') }}
-                </div>
-            </div>
-        </div>
-
-        {{-- Toast Session Check Start --}}
-        @if (session('toast'))
-            <script>
-                const toastLiveExample = document.getElementById('liveToast');
-                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(
-                    toastLiveExample);
-                toastBootstrap.show();
-            </script>
-            {{-- Optionally, clear the message after showing it to prevent it from reappearing on refresh --}}
-            @php session()->forget('toast'); @endphp
-        @endif
-        {{-- Toast Session Check End --}}
 
         {{-- CheckBox and Text Title End --}}
 

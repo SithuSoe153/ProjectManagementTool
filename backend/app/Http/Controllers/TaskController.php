@@ -60,7 +60,6 @@ class TaskController extends Controller
         }
 
         return back()->with('success', 'Task Assigned Successfully');
-        // Redirect or return a response
     }
 
     public function toggleCompleted(Request $request)
@@ -75,7 +74,7 @@ class TaskController extends Controller
             'is_completed' => !$task->is_completed,
         ]);
 
-        return response()->json(['success' => true, 'task' => $task]);
+        return response()->json(['success' => true, 'task' => $task, 'toast' => 'Task completed successfully']);
     }
 
 
