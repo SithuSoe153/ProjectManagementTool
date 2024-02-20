@@ -35,16 +35,17 @@
         </div>
     @endcan
 
-
     {{-- Tasks List --}}
 
-    <ul class="list-group">
-        {{-- CheckBox and Text Title Start --}}
-        @forelse ($tasks as $task)
 
+    @forelse ($tasks as $task)
+        <ul class="list-group" @can('check_Task', $task) id="sortable" @endcan>
+
+            {{-- CheckBox and Text Title Start --}}
             <div class="card my-2">
 
-                <h6 class="card-header">
+
+                <div class="card-header ui-state-default">
 
                     <div class="task-container" data-task-id="{{ $task->id }}">
 
@@ -52,7 +53,7 @@
                             class="form-check-input task-checkbox ms-0 me-2" value="{{ $task->id }}" type="checkbox"
                             id="task-{{ $task->id }}" @cannot('check_Task', $task) disabled @endcannot>
 
-                        <span class="task-text  {{ $task->is_completed ? 'task-completed' : '' }}">
+                        <span class="task-text  {{ $task->is_completed ? 'task-completed' : '' }} form-check-label">
                             {{ $task->title }}
                             |
                             @foreach ($task->users as $user)
@@ -103,7 +104,9 @@
                         </div>
                     @endcan
 
-                </h6>
+                </div>
+
+
 
                 <!-- Modal -->
                 <div class="modal fade" id="exampleModalCenter{{ $task->id }}" tabindex="-1"
@@ -170,13 +173,8 @@
                 </script>
 
 
-
-
-
-
                 {{-- CheckBox and Text Title End --}}
             </div>
-
 
 
             {{-- <hr> --}}
@@ -184,40 +182,14 @@
 
         @empty
             <p>No Tasks Here</p>
-        @endforelse
+    @endforelse
 
-        <!-- Hidden Toast form initially -->
-        <div class="toast-container position-fixed bottom-0 end-0 p-3">
-            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-header">
 
-                    <i class="fas fa-bell me-2"></i>
+    <!-- Hidden Toast form initially -->
 
-                    <strong class="me-auto">{{ session('toast') }}</strong>
-                    <small>now</small>
-                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-                <div class="toast-body">
-                    {{ session('toast') }}
-                </div>
-            </div>
-        </div>
 
-        {{-- Toast Session Check Start --}}
-        @if (session('toast'))
-            <script>
-                const toastLiveExample = document.getElementById('liveToast');
-                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(
-                    toastLiveExample);
-                toastBootstrap.show();
-            </script>
-            {{-- Optionally, clear the message after showing it to prevent it from reappearing on refresh --}}
-            @php session()->forget('toast'); @endphp
-        @endif
-        {{-- Toast Session Check End --}}
 
-        {{-- CheckBox and Text Title End --}}
-
+    {{-- CheckBox and Text Title End --}}
 
 
     </ul>

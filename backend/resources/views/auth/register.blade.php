@@ -4,7 +4,7 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <h3 class="card-title text-center mb-4">Create Your Account</h3>
+                        <h3 class="card-title text-center mb-4">Create New Account</h3>
                         <form action="/register" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="mb-3">

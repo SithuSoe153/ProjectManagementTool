@@ -4,30 +4,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>jQuery Example</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $(".task-checkbox").click(function() {
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
 
-                // $("p").text("Hello, jQuery!");
-                console.log("Hello, jQuery!");
-            });
-        });
-    </script>
+
 </head>
 
 <body>
+    <h1>Hello</h1>
+    {{-- socket cdn --}}
+    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"
+        integrity="sha384-Gr6Lu2Ajx28mzwyVR8CFkULdCU7kMlZ9UthllibdOSo6qAiN+yXNHqtgdTvFXMT4" crossorigin="anonymous">
+    </script>
 
-    <form action="">
+    {{-- jquery --}}
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
 
-        <input class="form-check-input task-checkbox ms-0 me-2" value="" type="checkbox" id="">
 
-    </form>
+    <button id="button">Press</button>
+    <script>
+        $(function() {
+            let ip_address = 'http://127.0.0.1:3000';
+            let socket = io(ip_address);
+            socket.on('connection');
 
-    {{-- <button>Click me</button> --}}
-    <p></p>
+            let button = $('#button');
 
+            button.click(function(e) {
+                socket.emit('sendChatToServer');
+            })
+
+            socket.on('sendChatToServer', () => {
+                console.log("okay okay okay");
+            })
+
+        })
+    </script>
 </body>
 
 </html>

@@ -6,7 +6,7 @@
 
             @if (auth()->check())
                 @if (auth()->user()->roles->first()->id == 1)
-                    <a href="#" class="nav-link">Add New User</a>
+                    <a href="/register" class="nav-link">Add New User</a>
                 @endif
             @endif
 

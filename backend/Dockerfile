@@ -18,8 +18,16 @@ RUN apt-get update && apt-get install -y \
 # Install Composer globally
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+# Install Node.js and npm
+# RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -s -- --skip-prompt
+RUN apt-get install -y nodejs npm
+
 # Copy the rest of the application code
 COPY . .
+
+# Install socket.io
+RUN npm install socket.io
 
 # Set permissions
 RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache

@@ -2,3 +2,23 @@
     color: #999;
     text-decoration: line-through;
 }
+
+/* Hide scrollbar for Chrome, Safari, and Opera */
+body::-webkit-scrollbar,
+html::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge, and Firefox */
+body,
+html {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+.ui-state-highlight {
+    min-height: 8em;
+    background-color: #999;
+    opacity: 5%;
+    border-radius: 3px;
+}

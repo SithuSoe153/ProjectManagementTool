@@ -10,6 +10,9 @@ Route::view('/test', 'test');
 
 Route::middleware('auth-user')->group(function () {
 
+    Route::post('/update-task-positions', [TaskController::class, 'updateTaskPositions']);
+
+
     Route::get('/profile/{user}/edit', [User::class, 'show']);
     Route::patch('/profile/{user}/update', [AuthController::class, 'update']);
 
@@ -44,8 +47,8 @@ Route::middleware('auth-user')->group(function () {
     // Route::post('/subscribeNewBlogs', [subscribeController::class, 'subscribeNewBlogs']);
 });
 
+Route::get('/register', [AuthController::class, 'create']);
 Route::middleware('guest')->group(function () {
-    Route::get('/register', [AuthController::class, 'create']);
     Route::post('/register', [AuthController::class, 'store']);
     Route::get('/login', [AuthController::class, 'login']);
     Route::post('/login', [AuthController::class, 'loginStore']);
