@@ -23,7 +23,7 @@
                             <h5 class="card-title">
                                 <a href="projects/{{ $project->project->id }}">{{ $project->project->title }}</a>
                             </h5>
-                            <p class="card-text">Creator: {{ $project->project->user->name }}</p>
+                            <p class="card-text">Created by: {{ $project->project->user->name }}</p>
 
                         </div>
                     </div>

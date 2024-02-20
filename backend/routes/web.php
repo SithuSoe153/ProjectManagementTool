@@ -47,8 +47,8 @@ Route::middleware('auth-user')->group(function () {
     // Route::post('/subscribeNewBlogs', [subscribeController::class, 'subscribeNewBlogs']);
 });
 
+Route::get('/register', [AuthController::class, 'create']);
 Route::middleware('guest')->group(function () {
-    Route::get('/register', [AuthController::class, 'create']);
     Route::post('/register', [AuthController::class, 'store']);
     Route::get('/login', [AuthController::class, 'login']);
     Route::post('/login', [AuthController::class, 'loginStore']);

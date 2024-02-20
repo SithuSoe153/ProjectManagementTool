@@ -38,10 +38,10 @@
     {{-- Tasks List --}}
 
 
-    <ul class="list-group" id="sortable">
+    @forelse ($tasks as $task)
+        <ul class="list-group" @can('check_Task', $task) id="sortable" @endcan>
 
-        {{-- CheckBox and Text Title Start --}}
-        @forelse ($tasks as $task)
+            {{-- CheckBox and Text Title Start --}}
             <div class="card my-2">
 
 
@@ -53,7 +53,7 @@
                             class="form-check-input task-checkbox ms-0 me-2" value="{{ $task->id }}" type="checkbox"
                             id="task-{{ $task->id }}" @cannot('check_Task', $task) disabled @endcannot>
 
-                        <span class="task-text  {{ $task->is_completed ? 'task-completed' : '' }}">
+                        <span class="task-text  {{ $task->is_completed ? 'task-completed' : '' }} form-check-label">
                             {{ $task->title }}
                             |
                             @foreach ($task->users as $user)
@@ -182,14 +182,14 @@
 
         @empty
             <p>No Tasks Here</p>
-        @endforelse
+    @endforelse
 
 
-        <!-- Hidden Toast form initially -->
+    <!-- Hidden Toast form initially -->
 
 
 
-        {{-- CheckBox and Text Title End --}}
+    {{-- CheckBox and Text Title End --}}
 
 
     </ul>

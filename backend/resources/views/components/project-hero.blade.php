@@ -10,7 +10,7 @@
             <small>Due Date: {{ $project->due_date }}</small>
         </div>
 
-        <p>Project Creator: {{ $project->user->name }}
+        <p>Created by: {{ $project->user->name }}
             ({{ $role = optional($project->user->roles->first())->name ?: '' }})</p>
         {{-- Show Members --}}
         <div class="mb-3">
