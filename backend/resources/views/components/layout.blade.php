@@ -58,10 +58,10 @@
     <title>Pipeline Project Management Bootstrap Theme</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="A project management Bootstrap theme by Medium Rare" />
-    <link href="assets/img/favicon.ico" rel="icon" type="image/x-icon" />
+    <link href="{{ asset('assets/img/favicon.ico') }}" rel="icon" type="image/x-icon" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Gothic+A1" rel="stylesheet" />
-    <link href="assets/css/theme.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="{{ asset('assets/css/theme.css') }}" rel="stylesheet" type="text/css" media="all" />
 
 
 </head>
@@ -69,11 +69,13 @@
 <body id="home">
     <x-navbar />
 
+
     @if (session()->has('success'))
-        <div class="alert alert-success text-center" role="alert">
+        <div class="alert alert-success mx-auto my-2 col-9 text-center" role="alert">
             {{ session('success') }}
         </div>
     @endif
+
     @if (session()->has('error'))
         <div class="alert alert-danger text-center" role="alert">
             {{ session('error') }}
@@ -281,28 +283,29 @@
 
     {{-- pipeline --}}
     <!-- Required vendor scripts (Do not remove) -->
-    <script type="text/javascript" src="assets/js/jquery.min.js"></script>
-    <script type="text/javascript" src="assets/js/popper.min.js"></script>
-    <script type="text/javascript" src="assets/js/bootstrap.js"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/popper.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/bootstrap.js') }}"></script>
 
     <!-- Optional Vendor Scripts (Remove the plugin script here and comment initializer script out of index.js if site does not use that feature) -->
 
     <!-- Autosize - resizes textarea inputs as user types -->
-    <script type="text/javascript" src="assets/js/autosize.min.js"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/autosize.min.js') }}"></script>
     <!-- Flatpickr (calendar/date/time picker UI) -->
-    <script type="text/javascript" src="assets/js/flatpickr.min.js"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/flatpickr.min.js') }}"></script>
     <!-- Prism - displays formatted code boxes -->
-    <script type="text/javascript" src="assets/js/prism.js"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/prism.js') }}"></script>
     <!-- Shopify Draggable - drag, drop and sort items on page -->
-    <script type="text/javascript" src="assets/js/draggable.bundle.legacy.js"></script>
-    <script type="text/javascript" src="assets/js/swap-animation.js"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/draggable.bundle.legacy.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/swap-animation.js') }}"></script>
     <!-- Dropzone - drag and drop files onto the page for uploading -->
-    <script type="text/javascript" src="assets/js/dropzone.min.js"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/dropzone.min.js') }}"></script>
     <!-- List.js - filter list elements -->
-    <script type="text/javascript" src="assets/js/list.min.js"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/list.min.js') }}"></script>
 
     <!-- Required theme scripts (Do not remove) -->
-    <script type="text/javascript" src="assets/js/theme.js"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/theme.js') }}"></script>
+
 
     <!-- This appears in the demo only - demonstrates different layouts -->
     <style type="text/css">
@@ -397,13 +400,7 @@
             }
         }
     </style>
-    <div class="layout-switcher" tabindex="1">
-        <div class="layout-switcher-head d-flex justify-content-between">
-            <span>Select Layout</span>
-            <i class="material-icons">arrow_drop_up</i>
-        </div>
-        <div class="layout-switcher-body"></div>
-    </div>
+
 
 </body>
 

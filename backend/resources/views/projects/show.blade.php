@@ -1,6 +1,5 @@
 <x-layout>
 
-
     <div class="container my-4">
 
         {{-- Project Details Card Start --}}
