@@ -2,9 +2,18 @@
 
 <div>
 
-    @can('create_Task', App\Models\Task::class)
-        <div class="mb-3">
-            <a href="#" class="btn btn-danger" onclick="toggleFormTask()">Add Task</a>
+    <div class="row content-list-head">
+        <div class="col-auto">
+            <h3>Tasks</h3>
+
+
+            @can('create_Task', App\Models\Task::class)
+                {{-- <div class="mb-3"> --}}
+                <button onclick="toggleFormTask()" class="btn btn-round" data-toggle="modal" data-target="#project-add-modal">
+                    <i class="material-icons">add</i>
+                </button>
+                {{-- </div> --}}
+            </div>
         </div>
 
 

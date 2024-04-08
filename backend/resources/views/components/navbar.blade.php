@@ -1,5 +1,4 @@
-<nav>
-    {{-- <div class="container">
+{{-- <div class="container">
         <a class="navbar-brand" href="/">Project Management</a>
         <div class="d-flex">
             <a href="/" class="nav-link">Home</a>
@@ -33,36 +32,36 @@
         </div>
     </div> --}}
 
-    <div class="layout layout-nav-top">
-        <div class="navbar navbar-expand-lg bg-dark navbar-dark sticky-top">
-            <a class="navbar-brand" href="index.html">
-                <img alt="Pipeline" src="{{ asset('assets/img/logo.svg') }}" />
-            </a>
 
-            <div class="collapse navbar-collapse justify-content-between" id="navbar-collapse">
-                <ul class="navbar-nav">
+<div class="navbar navbar-expand-lg bg-dark navbar-dark sticky-top">
+    <a class="navbar-brand" href="index.html">
+        <img alt="Pipeline" src="{{ asset('assets/img/logo.svg') }}" />
+    </a>
+
+    <div class="collapse navbar-collapse justify-content-between" id="navbar-collapse">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+
+            @if (auth()->check())
+                @if (auth()->user()->roles->first()->id == 1)
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Home</a>
+                        <a href="/register" class="nav-link">Add New User</a>
                     </li>
+                @endif
+            @endif
 
-                    @if (auth()->check())
-                        @if (auth()->user()->roles->first()->id == 1)
-                            <li class="nav-item">
-                                <a href="/register" class="nav-link">Add New User</a>
-                            </li>
-                        @endif
-                    @endif
+            <li class="nav-item">
+                <a class="nav-link" href="#">Manage Users</a>
+            </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Manage Users</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="/user/tasks">Assigned Task</a>
-                    </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/user/tasks">Assigned Task</a>
+            </li>
 
 
-                    {{-- <li class="nav-item">
+            {{-- <li class="nav-item">
                         <div class="dropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
                                 aria-expanded="false" aria-haspopup="true" id="nav-dropdown-2">Pages</a>
@@ -77,11 +76,11 @@
                     </li> --}}
 
 
-                </ul>
+        </ul>
 
 
-                <div class="d-lg-flex align-items-center">
-                    {{-- <form class="form-inline my-lg-0 my-2">
+        <div class="d-lg-flex align-items-center">
+            {{-- <form class="form-inline my-lg-0 my-2">
                         <div class="input-group input-group-dark input-group-round">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">
@@ -93,7 +92,7 @@
                         </div>
                     </form> --}}
 
-                    {{-- <div class="dropdown mx-lg-2">
+            {{-- <div class="dropdown mx-lg-2">
                         <button class="btn btn-primary btn-block dropdown-toggle" type="button" id="newContentButton"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Add New
@@ -105,56 +104,49 @@
                         </div>
                     </div> --}}
 
-                    <ul class="navbar-nav">
+            <ul class="navbar-nav">
 
-                        @if (auth()->check())
-                            <li class="nav-item">
-                                <a class="nav-link">
-                                    {{ auth()->user()->username }}
-                                </a>
-                            </li>
-                        @endif
+                @if (auth()->check())
+                    <li class="nav-item">
+                        <a class="nav-link">
+                            {{ auth()->user()->username }}
+                        </a>
+                    </li>
+                @endif
 
-                    </ul>
+            </ul>
 
-                    @if (auth()->check())
-                        <div class="d-none d-lg-block">
-                            <div class="dropdown">
-                                <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
-                                    <img alt="Image"
-                                        src=" /storage/{{ auth()->user()->photo ?: 'images/default.jpg' }}"
-                                        class="avatar" />
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <a href="/profile/{{ auth()->user()->id }}/edit" class="dropdown-item">Profile</a>
-                                    <a href="utility-account-settings.html" class="dropdown-item">Account Settings</a>
-                                    {{-- <a href="#" class="dropdown-item">Log Out</a> --}}
+            @if (auth()->check())
+                <div class="d-none d-lg-block">
+                    <div class="dropdown">
+                        <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            <img alt="Image" src=" /storage/{{ auth()->user()->photo ?: 'images/default.jpg' }}"
+                                class="avatar" />
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a href="/profile/{{ auth()->user()->id }}/edit" class="dropdown-item">Profile</a>
+                            <a href="utility-account-settings.html" class="dropdown-item">Account Settings</a>
+                            {{-- <a href="#" class="dropdown-item">Log Out</a> --}}
 
-                                    @if (!auth()->check())
-                                        <a href="/login" class="nav-link">login</a>
-                                        <a href="/register" class="nav-link">register</a>
-                                    @else
-                                        <form action="/logout" method="POST">
-                                            @csrf
-                                            <button class="dropdown-item">Log Out</button>
-                                        </form>
-                                    @endif
+                            @if (!auth()->check())
+                                <a href="/login" class="nav-link">login</a>
+                                <a href="/register" class="nav-link">register</a>
+                            @else
+                                <form action="/logout" method="POST">
+                                    @csrf
+                                    <button class="dropdown-item">Log Out</button>
+                                </form>
+                            @endif
 
 
-                                </div>
-                            </div>
                         </div>
-                    @endif
-
-
-
+                    </div>
                 </div>
-            </div>
+            @endif
+
+
+
         </div>
-
     </div>
-
-
-
-</nav>
+</div>

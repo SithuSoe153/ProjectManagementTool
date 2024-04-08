@@ -63,227 +63,14 @@
     <link href="https://fonts.googleapis.com/css?family=Gothic+A1" rel="stylesheet" />
     <link href="{{ asset('assets/css/theme.css') }}" rel="stylesheet" type="text/css" media="all" />
 
-
-</head>
-
-<body id="home">
-    <x-navbar />
-
-
-    @if (session()->has('success'))
-        <div class="alert alert-success mx-auto my-2 col-9 text-center" role="alert">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if (session()->has('error'))
-        <div class="alert alert-danger text-center" role="alert">
-            {{ session('error') }}
-        </div>
-    @endif
-
-
-    {{ $slot }}
-
-    <x-footer />
-
-
-    {{-- Toast Session Check Start --}}
-    @if (session('toast'))
-        <script>
-            const toastLiveExample = document.getElementById('liveToast');
-            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(
-                toastLiveExample);
-            toastBootstrap.show();
-        </script>
-        {{-- Optionally, clear the message after showing it to prevent it from reappearing on refresh --}}
-        @php session()->forget('toast'); @endphp
-    @endif
-    {{-- Toast Session Check End --}}
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous">
-    </script>
-
-
-    <script>
-        $(function() {
-            $("#sortable").sortable({
-                placeholder: "ui-state-highlight"
-            });
-            $("#sortable").disableSelection();
-        });
-
-
-
-
-        //
-
-
-        let ip_address = 'http://127.0.0.1:3000';
-        let socket = io(ip_address);
-        socket.on('connection');
-
-        //
-
-        // Listen for task position update event
-        socket.on('taskPositionUpdated', (taskIds) => {
-            console.log(taskIds);
-            // Get the parent container of tasks
-            const taskContainer = document.getElementById('sortable');
-            // Get the array of all task elements
-            const taskElements = Array.from(taskContainer.querySelectorAll('.card'));
-            // Sort the task elements based on their taskId order
-            taskElements.sort((a, b) => {
-                const taskIdA = parseInt(a.querySelector('.task-container').getAttribute('data-task-id'));
-                const taskIdB = parseInt(b.querySelector('.task-container').getAttribute('data-task-id'));
-                return taskIds.indexOf(taskIdA) - taskIds.indexOf(taskIdB);
-            });
-            // Append the sorted task elements back to the task container
-            taskElements.forEach(taskElement => taskContainer.appendChild(taskElement));
-        });
-
-        // Listen for task position update event
-        socket.on('checkedTaskUpdated', (taskId) => {
-            console.log(taskId);
-
-            // Find the checkbox element based on taskId
-            var checkbox = $('#task-' + taskId);
-
-            // Toggle checkbox state based on task completion status
-            checkbox.prop('checked', !checkbox.prop('checked'));
-
-            // Update corresponding task text styling
-            var taskContainer = checkbox.closest('.task-container');
-            var taskText = taskContainer.find('.task-text');
-            if (checkbox.prop('checked')) {
-                taskText.addClass('task-completed');
-            } else {
-                taskText.removeClass('task-completed');
-            }
-
-
-
-            // if (response.toast) {
-            // Create a new toast element
-            const newToast = document.createElement('div');
-            newToast.className = 'toast';
-            newToast.setAttribute('role', 'alert');
-            newToast.setAttribute('aria-live', 'assertive');
-            newToast.setAttribute('aria-atomic', 'true');
-
-            // Create the toast header
-            const toastHeader = document.createElement('div');
-            toastHeader.className = 'toast-header';
-            toastHeader.innerHTML = `
-                                                            <i class="fas fa-bell me-2"></i>
-                                                            <strong class="me-auto">Success</strong>
-                                                            <small>now</small>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                                                        `;
-
-            // Create the toast body
-            const toastBody = document.createElement('div');
-            toastBody.className = 'toast-body';
-            toastBody.textContent = 'Task Successfully';
-
-            // Append header and body to the toast element
-            newToast.appendChild(toastHeader);
-            newToast.appendChild(toastBody);
-
-            // Append the new toast to the toast container
-            const toastContainer = document.querySelector('.toast-container');
-            toastContainer.appendChild(newToast);
-
-            // Show the new toast
-            const newToastInstance = new bootstrap.Toast(newToast);
-            newToastInstance.show();
-            // }
-        });
-
-
-
-
-
-        //
-        $(function() {
-            $("#sortable").sortable({
-                update: function(event, ui) {
-                    var taskIds = [];
-                    $("#sortable .task-container").each(function() {
-                        taskIds.push($(this).data("task-id"));
-                    });
-
-                    // Send AJAX request to update task positions
-                    $.ajax({
-                        url: "/update-task-positions",
-                        method: "POST",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
-                                'content') // Include CSRF token in headers
-                        },
-                        data: {
-                            taskIds: taskIds
-                        },
-                        success: function(response) {
-                            socket.emit('updateTaskPosition', taskIds);
-
-                        },
-                        error: function(xhr, status, error) {
-                            console.error(error);
-                        }
-                    });
-
-
-                }
-            });
-        });
-    </script>
-
-
-    <script>
-        $(document).ready(function() {
-            $('.task-checkbox').click(function(event) {
-                event.preventDefault();
-
-                var checkbox = $(this);
-                var taskId = checkbox.val();
-
-                $.ajax({
-                    url: '/task/toggle-completed/' + taskId,
-                    type: 'POST',
-                    data: {
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-
-                        socket.emit('updateCheckedTask', taskId);
-
-                        // if (response.toast) {
-                        //     const toastLiveExample = document.getElementById('liveToast');
-                        //     const toastBootstrap = bootstrap.Toast.getOrCreateInstance(
-                        //         toastLiveExample);
-                        //     toastBootstrap.show();
-                        // }
-
-
-
-                    },
-                    error: function(xhr, status, error) {
-                        console.log("fail");
-                        // Handle error
-                    }
-                });
-            });
-        });
-    </script>
-
+    <!-- Flatpickr (calendar/date/time picker UI) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 
     {{-- pipeline --}}
     <!-- Required vendor scripts (Do not remove) -->
-    <script type="text/javascript" src="{{ asset('assets/js/jquery.min.js') }}"></script>
+    {{-- <script type="text/javascript" src="{{ asset('assets/js/jquery.min.js') }}"></script> --}}
     <script type="text/javascript" src="{{ asset('assets/js/popper.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/bootstrap.js') }}"></script>
 
@@ -291,8 +78,8 @@
 
     <!-- Autosize - resizes textarea inputs as user types -->
     <script type="text/javascript" src="{{ asset('assets/js/autosize.min.js') }}"></script>
-    <!-- Flatpickr (calendar/date/time picker UI) -->
-    <script type="text/javascript" src="{{ asset('assets/js/flatpickr.min.js') }}"></script>
+
+    {{-- <script type="text/javascript" src="{{ asset('assets/js/flatpickr.min.js') }}"></script> --}}
     <!-- Prism - displays formatted code boxes -->
     <script type="text/javascript" src="{{ asset('assets/js/prism.js') }}"></script>
     <!-- Shopify Draggable - drag, drop and sort items on page -->
@@ -307,101 +94,320 @@
     <script type="text/javascript" src="{{ asset('assets/js/theme.js') }}"></script>
 
 
-    <!-- This appears in the demo only - demonstrates different layouts -->
-    <style type="text/css">
-        .layout-switcher {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%) translateY(73px);
-            color: #fff;
-            transition: all 0.35s ease;
-            background: #343a40;
-            border-radius: 0.25rem 0.25rem 0 0;
-            padding: 0.75rem;
-            z-index: 999;
-        }
 
-        .layout-switcher:not(:hover) {
-            opacity: 0.95;
-        }
 
-        .layout-switcher:not(:focus) {
-            cursor: pointer;
-        }
+</head>
 
-        .layout-switcher-head {
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
+<body id="home">
+    <div class="layout layout-nav-top">
+        <x-navbar />
 
-        .layout-switcher-head i {
-            font-size: 1.25rem;
-            transition: all 0.35s ease;
-        }
 
-        .layout-switcher-body {
-            transition: all 0.55s ease;
-            opacity: 0;
-            padding-top: 0.75rem;
-            transform: translateY(24px);
-            text-align: center;
-        }
+        @if (session()->has('success'))
+            <div class="alert alert-success mx-auto my-2 col-9 text-center" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
 
-        .layout-switcher:focus {
-            opacity: 1;
-            outline: none;
-            transform: translateX(-50%) translateY(0);
-        }
+        @if (session()->has('error'))
+            <div class="alert alert-danger text-center" role="alert">
+                {{ session('error') }}
+            </div>
+        @endif
 
-        .layout-switcher:focus .layout-switcher-head i {
-            transform: rotateZ(180deg);
-            opacity: 0;
-        }
 
-        .layout-switcher:focus .layout-switcher-body {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        {{ $slot }}
 
-        .layout-switcher-option {
-            width: 72px;
-            padding: 0.25rem;
-            border: 2px solid rgba(255, 255, 255, 0);
-            display: inline-block;
-            border-radius: 4px;
-            transition: all 0.35s ease;
-        }
+        <x-footer />
 
-        .layout-switcher-option.active {
-            border-color: #007bff;
-        }
 
-        .layout-switcher-icon {
-            width: 100%;
-            border-radius: 4px;
-        }
+        {{-- Toast Session Check Start --}}
+        @if (session('toast'))
+            <script>
+                const toastLiveExample = document.getElementById('liveToast');
+                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(
+                    toastLiveExample);
+                toastBootstrap.show();
+            </script>
+            {{-- Optionally, clear the message after showing it to prevent it from reappearing on refresh --}}
+            @php session()->forget('toast'); @endphp
+        @endif
+        {{-- Toast Session Check End --}}
 
-        .layout-switcher-body:hover .layout-switcher-option:not(:hover) {
-            opacity: 0.5;
-            transform: scale(0.9);
-        }
 
-        @media all and (max-width: 990px) {
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous">
+        </script>
+
+
+        <script>
+            $(function() {
+                $("#sortable").sortable({
+                    placeholder: "ui-state-highlight"
+                });
+                $("#sortable").disableSelection();
+            });
+
+
+
+
+            //
+
+
+            let ip_address = 'http://127.0.0.1:3000';
+            let socket = io(ip_address);
+            socket.on('connection');
+
+            //
+
+            // Listen for task position update event
+            socket.on('taskPositionUpdated', (taskIds) => {
+                console.log(taskIds);
+                // Get the parent container of tasks
+                const taskContainer = document.getElementById('sortable');
+                // Get the array of all task elements
+                const taskElements = Array.from(taskContainer.querySelectorAll('.card'));
+                // Sort the task elements based on their taskId order
+                taskElements.sort((a, b) => {
+                    const taskIdA = parseInt(a.querySelector('.task-container').getAttribute('data-task-id'));
+                    const taskIdB = parseInt(b.querySelector('.task-container').getAttribute('data-task-id'));
+                    return taskIds.indexOf(taskIdA) - taskIds.indexOf(taskIdB);
+                });
+                // Append the sorted task elements back to the task container
+                taskElements.forEach(taskElement => taskContainer.appendChild(taskElement));
+            });
+
+            // Listen for task position update event
+            socket.on('checkedTaskUpdated', (taskId) => {
+                console.log(taskId);
+
+                // Find the checkbox element based on taskId
+                var checkbox = $('#task-' + taskId);
+
+                // Toggle checkbox state based on task completion status
+                checkbox.prop('checked', !checkbox.prop('checked'));
+
+                // Update corresponding task text styling
+                var taskContainer = checkbox.closest('.task-container');
+                var taskText = taskContainer.find('.task-text');
+                if (checkbox.prop('checked')) {
+                    taskText.addClass('task-completed');
+                } else {
+                    taskText.removeClass('task-completed');
+                }
+
+
+
+                // if (response.toast) {
+                // Create a new toast element
+                const newToast = document.createElement('div');
+                newToast.className = 'toast';
+                newToast.setAttribute('role', 'alert');
+                newToast.setAttribute('aria-live', 'assertive');
+                newToast.setAttribute('aria-atomic', 'true');
+
+                // Create the toast header
+                const toastHeader = document.createElement('div');
+                toastHeader.className = 'toast-header';
+                toastHeader.innerHTML = `
+                                                            <i class="fas fa-bell me-2"></i>
+                                                            <strong class="me-auto">Success</strong>
+                                                            <small>now</small>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                                                        `;
+
+                // Create the toast body
+                const toastBody = document.createElement('div');
+                toastBody.className = 'toast-body';
+                toastBody.textContent = 'Task Successfully';
+
+                // Append header and body to the toast element
+                newToast.appendChild(toastHeader);
+                newToast.appendChild(toastBody);
+
+                // Append the new toast to the toast container
+                const toastContainer = document.querySelector('.toast-container');
+                toastContainer.appendChild(newToast);
+
+                // Show the new toast
+                const newToastInstance = new bootstrap.Toast(newToast);
+                newToastInstance.show();
+                // }
+            });
+
+
+
+
+
+            //
+            $(function() {
+                $("#sortable").sortable({
+                    update: function(event, ui) {
+                        var taskIds = [];
+                        $("#sortable .task-container").each(function() {
+                            taskIds.push($(this).data("task-id"));
+                        });
+
+                        // Send AJAX request to update task positions
+                        $.ajax({
+                            url: "/update-task-positions",
+                            method: "POST",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                                    'content') // Include CSRF token in headers
+                            },
+                            data: {
+                                taskIds: taskIds
+                            },
+                            success: function(response) {
+                                socket.emit('updateTaskPosition', taskIds);
+
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(error);
+                            }
+                        });
+
+
+                    }
+                });
+            });
+        </script>
+
+
+        <script>
+            $(document).ready(function() {
+                $('.task-checkbox').click(function(event) {
+                    event.preventDefault();
+
+                    var checkbox = $(this);
+                    var taskId = checkbox.val();
+
+                    $.ajax({
+                        url: '/task/toggle-completed/' + taskId,
+                        type: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+
+                            socket.emit('updateCheckedTask', taskId);
+
+                            // if (response.toast) {
+                            //     const toastLiveExample = document.getElementById('liveToast');
+                            //     const toastBootstrap = bootstrap.Toast.getOrCreateInstance(
+                            //         toastLiveExample);
+                            //     toastBootstrap.show();
+                            // }
+
+
+
+                        },
+                        error: function(xhr, status, error) {
+                            console.log("fail");
+                            // Handle error
+                        }
+                    });
+                });
+            });
+        </script>
+
+
+        <!-- This appears in the demo only - demonstrates different layouts -->
+        <style type="text/css">
             .layout-switcher {
-                min-width: 250px;
+                position: fixed;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%) translateY(73px);
+                color: #fff;
+                transition: all 0.35s ease;
+                background: #343a40;
+                border-radius: 0.25rem 0.25rem 0 0;
+                padding: 0.75rem;
+                z-index: 999;
             }
-        }
 
-        @media all and (max-width: 767px) {
-            .layout-switcher {
-                display: none;
+            .layout-switcher:not(:hover) {
+                opacity: 0.95;
             }
-        }
-    </style>
 
+            .layout-switcher:not(:focus) {
+                cursor: pointer;
+            }
 
+            .layout-switcher-head {
+                font-size: 0.75rem;
+                font-weight: 600;
+                text-transform: uppercase;
+            }
+
+            .layout-switcher-head i {
+                font-size: 1.25rem;
+                transition: all 0.35s ease;
+            }
+
+            .layout-switcher-body {
+                transition: all 0.55s ease;
+                opacity: 0;
+                padding-top: 0.75rem;
+                transform: translateY(24px);
+                text-align: center;
+            }
+
+            .layout-switcher:focus {
+                opacity: 1;
+                outline: none;
+                transform: translateX(-50%) translateY(0);
+            }
+
+            .layout-switcher:focus .layout-switcher-head i {
+                transform: rotateZ(180deg);
+                opacity: 0;
+            }
+
+            .layout-switcher:focus .layout-switcher-body {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .layout-switcher-option {
+                width: 72px;
+                padding: 0.25rem;
+                border: 2px solid rgba(255, 255, 255, 0);
+                display: inline-block;
+                border-radius: 4px;
+                transition: all 0.35s ease;
+            }
+
+            .layout-switcher-option.active {
+                border-color: #007bff;
+            }
+
+            .layout-switcher-icon {
+                width: 100%;
+                border-radius: 4px;
+            }
+
+            .layout-switcher-body:hover .layout-switcher-option:not(:hover) {
+                opacity: 0.5;
+                transform: scale(0.9);
+            }
+
+            @media all and (max-width: 990px) {
+                .layout-switcher {
+                    min-width: 250px;
+                }
+            }
+
+            @media all and (max-width: 767px) {
+                .layout-switcher {
+                    display: none;
+                }
+            }
+        </style>
+
+    </div>
 </body>
 
 

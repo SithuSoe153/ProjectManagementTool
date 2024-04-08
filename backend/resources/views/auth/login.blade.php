@@ -80,7 +80,7 @@
     <!-- Autosize - resizes textarea inputs as user types -->
     <script type="text/javascript" src="assets/js/autosize.min.js"></script>
     <!-- Flatpickr (calendar/date/time picker UI) -->
-    <script type="text/javascript" src="assets/js/flatpickr.min.js"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/flatpickr.min.js') }}"></script>
     <!-- Prism - displays formatted code boxes -->
     <script type="text/javascript" src="assets/js/prism.js"></script>
     <!-- Shopify Draggable - drag, drop and sort items on page -->

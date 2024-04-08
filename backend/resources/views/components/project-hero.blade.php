@@ -2,6 +2,7 @@
 <div class="card mb-4">
     <div class="card-body">
         <h4 class="card-title"><span style=" color: #888;">Project name</span>: {{ $project->title }}</h4>
+        <h6 class="card-title"><span style=" color: #888;">{{ $project->description }}</span></h6>
 
         <div>
             <small>Start Date: {{ $project->start_date }}</small>
@@ -16,7 +17,7 @@
         <div class="mb-3">
             <strong>Members:
 
-                {{ $project->project_role_assignments->unique('user_id')->count() ?: 'No members assigned yet' }}
+                {{ $project->project_role_assignments->unique('user_id')->count() ?: '' }}
             </strong>
 
             <x-btn-add-member :project="$project" :roles="$roles" />
