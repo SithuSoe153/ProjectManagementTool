@@ -109,6 +109,8 @@
             </div>
         @endif
 
+
+
         @if (session()->has('error'))
             <div class="alert alert-danger text-center" role="alert">
                 {{ session('error') }}

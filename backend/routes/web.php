@@ -23,7 +23,7 @@ Route::middleware('auth-user')->group(function () {
     Route::get('/', [ProjectController::class, 'index']);
     Route::get('/projects/{project}', [ProjectController::class, 'show'])->middleware('can:view_Project,project');
 
-    Route::get('/project/create', [ProjectController::class, 'create']);
+    // Route::get('/project/create', [ProjectController::class, 'create']);
     Route::post('/project/store', [ProjectController::class, 'store']);
     Route::patch('/project/{project}/update', [ProjectController::class, 'update']);
     Route::delete('/project/{project}/delete', [ProjectController::class, 'destroy']);
