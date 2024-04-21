@@ -60,7 +60,7 @@
                                 {{-- {{ optional($assignment)->user->name ?? 'No members assigned yet' }} --}}
                                 <a href="#" data-toggle="tooltip" title="Kenny">
                                     <img alt="Kenny Tran" class="avatar" {{-- src="/storage/{{ optional($assignment)->user->photo ?? 'images/default.jpg' }}" --}}
-                                        src=" /storage/{{ optional($assignment)->user->photo ?: 'images/cat.jpg' }}"
+                                        src="{{ optional($assignment)->user->photo ? '/storage/' . optional($assignment)->user->photo : 'https://source.unsplash.com/featured/?man?' . $assignment->user->id }}"
                                         data-filter-by="alt" />
                                 </a>
 
@@ -107,6 +107,15 @@
                             <input type="text" name="title" class="form-control" id="exampleInputEmail1"
                                 aria-describedby="emailHelp" value="{{ old('title') ?: $project->title }}">
                             @error('title')
+                                <p class="text-danger">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label>Project Description</label>
+                            <input type="text" name="description" class="form-control" id="exampleInputEmail1"
+                                aria-describedby="emailHelp" value="{{ old('description') ?: $project->description }}">
+                            @error('description')
                                 <p class="text-danger">{{ $message }}</p>
                             @enderror
                         </div>

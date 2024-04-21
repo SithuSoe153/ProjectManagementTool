@@ -104,7 +104,7 @@
                                                                         title="Kenny">
                                                                         <img alt="Kenny Tran" class="avatar"
                                                                             {{-- src="/storage/{{ optional($assignment)->user->photo ?? 'images/default.jpg' }}" --}}
-                                                                            src=" /storage/{{ optional($assignment)->user->photo ?: 'images/cat.jpg' }}"
+                                                                            src="{{ optional($assignment)->user->photo ? '/storage/' . optional($assignment)->user->photo : 'https://source.unsplash.com/random?' . $assignment->user->id }}"
                                                                             data-filter-by="alt" />
                                                                     </a>
 

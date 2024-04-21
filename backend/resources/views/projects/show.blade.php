@@ -1,10 +1,62 @@
 <x-layout>
 
+    {{-- Bread Crumb --}}
+    <div class="navbar bg-white breadcrumb-bar">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item" aria-current="page">Project</li>
+            </ol>
+        </nav>
+
+
+        {{-- <div class="dropdown">
+            <button class="btn btn-round" role="button" data-toggle="dropdown" aria-expanded="false">
+                <i class="material-icons">settings</i>
+
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#project-edit-modal">Edit
+                    Project</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item text-danger" href="#">Archive</a>
+            </div>
+        </div> --}}
+
+    </div>
+
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-11 col-xl-10">
                 <br>
                 <div class="tab-content">
+
+                    <style>
+                        .kbtn {
+                            display: flex;
+                            /* Flex display to align children inline */
+                            align-items: center;
+                            /* Align children vertically in the center */
+                            justify-content: center;
+                            /* Center children horizontally */
+                        }
+
+                        /* .btn .material-icons {
+                            margin-right: 8px;
+                        } */
+                    </style>
+
+                    <div class="row mb-1">
+                        <div class="col-12">
+                            <a href="/projects/{{ $project->id }}/kanbanBoard" class="kbtn btn-info btn-lg btn-block">
+                                <i class="material-icons">dashboard</i>&nbsp; Kanban Board</button>
+                            </a>
+                        </div>
+                        {{-- <div class="col-6">
+                            <button type="button" class="btn btn-info btn-lg btn-block"> <i
+                                    class="material-icons">video_call</i>Video Call</button>
+                        </div> --}}
+                    </div>
 
                     {{-- Project Details Card Start --}}
                     <x-project-hero :project="$project" :roles="$roles" />

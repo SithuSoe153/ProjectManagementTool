@@ -28,7 +28,6 @@ class ProjectController extends Controller
         ]);
     }
 
-
     public function show(Project $project)
     {
         $project->load(['tasks' => function ($query) {
@@ -44,9 +43,9 @@ class ProjectController extends Controller
 
 
 
-
     public function store(ProjectRequest $request)
     {
+
         $cleanData = $request->validated();
         $cleanData['user_id'] = auth()->id();
 
@@ -54,7 +53,6 @@ class ProjectController extends Controller
         unset($cleanData['selected_users']);
 
         $project = Project::create($cleanData);
-
         // Check if any members are selected
         if ($request->has('selected_users') && !empty($request->selected_users)) {
             foreach ($request->selected_users as $userId) {
@@ -66,8 +64,6 @@ class ProjectController extends Controller
                 ]);
             }
         }
-
-        // Other project creation logic...
 
         return redirect('/')->with('success', 'Project created successfully.');
     }

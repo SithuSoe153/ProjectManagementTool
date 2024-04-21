@@ -99,7 +99,9 @@
 </head>
 
 <body id="home">
+
     <div class="layout layout-nav-top">
+
         <x-navbar />
 
 
@@ -315,99 +317,7 @@
         </script>
 
 
-        <!-- This appears in the demo only - demonstrates different layouts -->
-        <style type="text/css">
-            .layout-switcher {
-                position: fixed;
-                bottom: 0;
-                left: 50%;
-                transform: translateX(-50%) translateY(73px);
-                color: #fff;
-                transition: all 0.35s ease;
-                background: #343a40;
-                border-radius: 0.25rem 0.25rem 0 0;
-                padding: 0.75rem;
-                z-index: 999;
-            }
 
-            .layout-switcher:not(:hover) {
-                opacity: 0.95;
-            }
-
-            .layout-switcher:not(:focus) {
-                cursor: pointer;
-            }
-
-            .layout-switcher-head {
-                font-size: 0.75rem;
-                font-weight: 600;
-                text-transform: uppercase;
-            }
-
-            .layout-switcher-head i {
-                font-size: 1.25rem;
-                transition: all 0.35s ease;
-            }
-
-            .layout-switcher-body {
-                transition: all 0.55s ease;
-                opacity: 0;
-                padding-top: 0.75rem;
-                transform: translateY(24px);
-                text-align: center;
-            }
-
-            .layout-switcher:focus {
-                opacity: 1;
-                outline: none;
-                transform: translateX(-50%) translateY(0);
-            }
-
-            .layout-switcher:focus .layout-switcher-head i {
-                transform: rotateZ(180deg);
-                opacity: 0;
-            }
-
-            .layout-switcher:focus .layout-switcher-body {
-                opacity: 1;
-                transform: translateY(0);
-            }
-
-            .layout-switcher-option {
-                width: 72px;
-                padding: 0.25rem;
-                border: 2px solid rgba(255, 255, 255, 0);
-                display: inline-block;
-                border-radius: 4px;
-                transition: all 0.35s ease;
-            }
-
-            .layout-switcher-option.active {
-                border-color: #007bff;
-            }
-
-            .layout-switcher-icon {
-                width: 100%;
-                border-radius: 4px;
-            }
-
-            .layout-switcher-body:hover .layout-switcher-option:not(:hover) {
-                opacity: 0.5;
-                transform: scale(0.9);
-            }
-
-            @media all and (max-width: 990px) {
-                .layout-switcher {
-                    min-width: 250px;
-                }
-            }
-
-            @media all and (max-width: 767px) {
-                .layout-switcher {
-                    display: none;
-                }
-            }
-        </style>
 
     </div>
 </body>

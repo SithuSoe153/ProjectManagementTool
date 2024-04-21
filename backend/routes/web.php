@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BoardController;
+use App\Http\Controllers\KanbanController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 use App\Models\User;
@@ -22,6 +24,7 @@ Route::middleware('auth-user')->group(function () {
 
     Route::get('/', [ProjectController::class, 'index']);
     Route::get('/projects/{project}', [ProjectController::class, 'show'])->middleware('can:view_Project,project');
+    Route::get('/projects/{project}/kanbanBoard', [KanbanController::class, 'showkanban']);
 
     // Route::get('/project/create', [ProjectController::class, 'create']);
     Route::post('/project/store', [ProjectController::class, 'store']);

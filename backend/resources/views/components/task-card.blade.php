@@ -45,6 +45,8 @@
 
         {{-- New Hidden Add Task form initially --}}
 
+        <div id="modal-container"></div>
+
 
         <form action="/project/{{ $project->id }}/task" method="POST" enctype="multipart/form-data" class="modal fade"
             id="task-add-modal" tabindex="-1" aria-hidden="true">
@@ -157,10 +159,10 @@
 
                                         @foreach ($project->project_role_assignments->unique('user_id') as $user)
                                             <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" name="selected_users[]" value="{{ $user->id }}"
-                                                    class="custom-control-input" id="{{ $user->id }}">
+                                                <input type="checkbox" name="selected_users[]" value="{{ $user->user->id }}"
+                                                    class="custom-control-input" id="{{ $user->user->id }}">
 
-                                                <label class="custom-control-label" for="{{ $user->id }}">
+                                                <label class="custom-control-label" for="{{ $user->user->id }}">
                                                     <span class="d-flex align-items-center">
                                                         <img alt="Claire Connors"
                                                             src=" /storage/{{ optional($user)->photo ?: 'images/cat.jpg' }}"
@@ -190,6 +192,8 @@
                 </div>
             </div>
         </form>
+
+
     @endcan
 
     {{-- Tasks List --}}
@@ -198,68 +202,170 @@
     {{-- <ul class="list-group" @can('check_Task', $task) id="sortable" @endcan> --}}
     <ul class="list-group" id="sortable">
         @forelse ($tasks as $task)
-
-
-
             {{-- CheckBox and Text Title Start --}}
             <div class="card my-2">
 
-                <div class="content-list-body">
-                    <form class="checklist">
-                        <div class="row">
-                            <div class="form-group col">
 
-                                <div class="custom-control custom-checkbox col">
-                                    <input type="checkbox" class="custom-control-input"
-                                        id="checklist-item-{{ $task->id }}" checked />
-                                    <label class="custom-control-label"
-                                        for="checklist-item-{{ $task->id }}"></label>
-                                    <div>
-                                        <input type="text" placeholder="Checklist item"
-                                            value="Create boards in Matboard" data-filter-by="value" />
-                                        <div class="checklist-strikethrough"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--end of form group-->
-                        </div>
-                    </form>
-                </div>
 
-                <div class="card-header ui-state-default">
+                <div class="card-header ui-state-default" style="padding: 0;">
 
                     <div class="task-container" data-task-id="{{ $task->id }}">
 
-                        <input {{ $task->is_completed ? 'checked' : '' }}
-                            class="form-check-input task-checkbox ms-0 me-2" value="{{ $task->id }}"
-                            type="checkbox" id="task-{{ $task->id }}"
-                            @cannot('check_Task', $task) disabled @endcannot>
+                        <div class="content-list-body">
+                            <form class="checklist">
+
+                                <div class="custom-control custom-checkbox">
+
+                                    <div class="card-body" style="padding-bottom: 0;">
+
+                                        <input {{ $task->is_completed ? 'checked' : '' }} type="checkbox"
+                                            id="task-{{ $task->id }}" class="task-checkbox custom-control-input"
+                                            value="{{ $task->id }}"
+                                            @cannot('check_Task', $task) disabled @endcannot />
 
 
+                                        <label class="custom-control-label" for="task-{{ $task->id }}"></label>
+
+                                        <div>
+                                            <input type="text" placeholder="Checklist item"
+                                                value="{{ $task->title }}" data-filter-by="value" />
+
+                                            <div class="checklist-strikethrough"></div>
+
+                                        </div>
+
+
+                                        <h6><span style=" color: #888;"><small>Due Date:
+                                                    {{ $task->due_date }}</small></span></h6>
+
+                                        <div class="dropdown card-options">
+                                            <button class="btn-options" type="button" id="project-dropdown-button-1"
+                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="material-icons">more_vert</i>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-right">
+
+                                                @can('update_Task', $task)
+                                                    <button type="button" class="dropdown-item" data-bs-toggle="modal"
+                                                        data-bs-target="#exampleModalCenter{{ $task->id }}">
+                                                        Edit
+                                                    </button>
+                                                @endcan
+
+
+
+                                                <form action="/task/{{ $task->id }}/delete" method="POST"
+                                                    hidden>
+                                                    @csrf
+                                                    @method('DELETE')
+
+                                                    <button type="submit" class="btn btn-danger btn-sm ms-2" hidden>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                            height="16" fill="currentColor" class="bi bi-trash"
+                                                            viewBox="0 0 16 16">
+                                                            <path
+                                                                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                                                            <path
+                                                                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                                                        </svg>
+                                                    </button>
+                                                </form>
+
+
+
+                                                @can('delete_Task', $task)
+                                                    <form action="/task/{{ $task->id }}/delete" method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+
+                                                        <button type="submit" class="dropdown-item text-danger">
+                                                            Delete
+                                                        </button>
+                                                    </form>
+                                                @endcan
+
+
+                                                </a>
+                                            </div>
+                                        </div>
+
+
+                                        <ul class="avatars mt-2">
+
+
+
+                                            {{-- @if (!$task->is_completed)
+                                                @can('assign_Member', $task)
+                                                    <x-btn-assign-member :project='$project' :task="$task" />
+                                                @endcan
+                                            @endif --}}
+
+
+                                            @if (count($project->project_role_assignments) > 0)
+                                                @foreach ($task->users as $assignment)
+                                                    <li>
+
+                                                        {{-- {{ optional($assignment)->user->name ?? 'No members assigned yet' }} --}}
+                                                        <a href="#" data-toggle="tooltip" title="Kenny">
+                                                            <img alt="Kenny Tran" class="avatar"
+                                                                {{-- src="/storage/{{ optional($assignment)->user->photo ?? 'images/cat.jpg' }}" --}}
+                                                                src="{{ optional($assignment)->photo ? '/storage/' . optional($assignment)->photo : 'https://source.unsplash.com/random?' . $assignment->id }}"
+                                                                data-filter-by="alt" />
+                                                        </a>
+
+
+
+                                                    </li>
+                                                @endforeach
+                                            @else
+                                                No members assigned yet
+                                            @endif
+
+
+
+                                        </ul>
+
+                                    </div>
+
+
+
+                                    <br>
+
+
+
+                                </div>
+
+                            </form>
+                        </div>
                     </div>
 
 
-                    <span class="task-text  {{ $task->is_completed ? 'task-completed' : '' }} form-check-label">
-                        {{ $task->title }}
-                        |
-                        @foreach ($task->users as $user)
-                            {{ $user->name }}
-                        @endforeach
-                    </span>
-
-                    @if (!$task->is_completed)
-                        @can('assign_Member', $task)
-                            <x-btn-assign-member :project='$project' :task="$task" />
-                        @endcan
-                    @endif
-                    <br>
-                    <span>
-                        <small class="mx-4">Due Date: {{ $task->due_date }}</small>
-                    </span>
                 </div>
 
 
-                @can('update_Task', $task)
+                {{-- <div class="d-flex m-3 card-footer">
+                    <ul class="avatars mt-2">
+                        @if (count($project->project_role_assignments) > 0)
+                            @foreach ($task->users as $assignment)
+                                <li>
+
+                                    <a href="#" data-toggle="tooltip" title="Kenny">
+                                        <img alt="Kenny Tran" class="avatar"
+                                            src="{{ optional($assignment)->photo ? '/storage/' . optional($assignment)->photo : 'https://source.unsplash.com/random?' . $assignment->id }}"
+                                            data-filter-by="alt" />
+                                    </a>
+
+
+
+                                </li>
+                            @endforeach
+                        @else
+                            No members assigned yet
+                        @endif
+                    </ul>
+                </div> --}}
+
+                {{-- @can('update_Task', $task)
                     <div class="d-flex m-3">
                         <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
                             data-bs-target="#exampleModalCenter{{ $task->id }}">
@@ -289,66 +395,66 @@
                             </button>
                         </form>
                     </div>
-                @endcan
+                @endcan --}}
+
+
 
             </div>
 
             <!-- Modal -->
-            {{-- <div class="modal fade" id="exampleModalCenter{{ $task->id }}" tabindex="-1"
-                    aria-labelledby="exampleModalCenterTitle{{ $task->id }}" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header mx-3">
-                                <h5 class="modal-title" id="exampleModalCenterTitle{{ $task->id }}">
-                                    Edit Task</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body mx-3">
-                                <form id="editProjectForm{{ $task->id }}"
-                                    action="/task/{{ $task->id }}/update" method="POST"
-                                    enctype="multipart/form-data">
-                                    @csrf
-                                    @method('PATCH')
+            <div class="modal fade" id="exampleModalCenter{{ $task->id }}" tabindex="-1"
+                aria-labelledby="exampleModalCenterTitle{{ $task->id }}" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalCenterTitle{{ $task->id }}">
+                                Edit Task</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body mx-3">
+                            <form id="editProjectForm{{ $task->id }}" action="/task/{{ $task->id }}/update"
+                                method="POST" enctype="multipart/form-data">
+                                @csrf
+                                @method('PATCH')
 
-                                    <div class="form-group">
-                                        <label>Task Title</label>
-                                        <input type="text" name="title" class="form-control"
-                                            id="exampleInputEmail1" aria-describedby="emailHelp"
-                                            value="{{ old('title') ?: $task->title }}">
-                                        @error('title')
-                                            <p class="text-danger">{{ $message }}</p>
-                                        @enderror
-                                    </div>
+                                <div class="form-group">
+                                    <label>Task Title</label>
+                                    <input type="text" name="title" class="form-control"
+                                        id="exampleInputEmail1" aria-describedby="emailHelp"
+                                        value="{{ old('title') ?: $task->title }}">
+                                    @error('title')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
 
-                                    <div class="form-group">
-                                        <label for="start_date">Description:</label>
-                                        <input type="text" name="description" class="form-control"
-                                            id="description" value="{{ old('description') ?: $task->description }}">
-                                        @error('start_date')
-                                            <p class="text-danger">{{ $message }}</p>
-                                        @enderror
-                                    </div>
+                                <div class="form-group">
+                                    <label for="start_date">Description:</label>
+                                    <input type="text" name="description" class="form-control" id="description"
+                                        value="{{ old('description') ?: $task->description }}">
+                                    @error('start_date')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
 
-                                    <div class="form-group">
-                                        <label for="due_date">Due Date</label>
-                                        <input type="date" name="due_date" class="form-control" id="due_date"
-                                            value="{{ old('due_date') ?: $task->due_date }}">
-                                        @error('due_date')
-                                            <p class="text-danger">{{ $message }}</p>
-                                        @enderror
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer mx-3">
-                                <button type="button" class="btn btn-secondary"
-                                    data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary"
-                                    onclick="submitForm('{{ $task->id }}')">Save changes</button>
-                            </div>
+                                <div class="form-group">
+                                    <label for="due_date">Due Date</label>
+                                    <input type="date" name="due_date" class="form-control" id="due_date"
+                                        value="{{ old('due_date') ?: $task->due_date }}">
+                                    @error('due_date')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary"
+                                onclick="submitForm('{{ $task->id }}')">Save changes</button>
                         </div>
                     </div>
-                </div> --}}
+                </div>
+            </div>
 
             <script>
                 function submitForm(projectId) {
@@ -359,23 +465,10 @@
 
 
             {{-- CheckBox and Text Title End --}}
-            {{-- </div> --}}
-
-
-            {{-- <hr> --}}
-
 
         @empty
             <p>No Tasks Here</p>
         @endforelse
-
-
-        <!-- Hidden Toast form initially -->
-
-
-
-        {{-- CheckBox and Text Title End --}}
-
 
     </ul>
 </div>

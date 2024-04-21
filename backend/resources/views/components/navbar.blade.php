@@ -129,13 +129,14 @@
                             <a href="utility-account-settings.html" class="dropdown-item">Account Settings</a>
                             {{-- <a href="#" class="dropdown-item">Log Out</a> --}}
 
+                            <div class="dropdown-divider"></div>
                             @if (!auth()->check())
                                 <a href="/login" class="nav-link">login</a>
                                 <a href="/register" class="nav-link">register</a>
                             @else
                                 <form action="/logout" method="POST">
                                     @csrf
-                                    <button class="dropdown-item">Log Out</button>
+                                    <button class="dropdown-item text-danger">Log Out</button>
                                 </form>
                             @endif
 
