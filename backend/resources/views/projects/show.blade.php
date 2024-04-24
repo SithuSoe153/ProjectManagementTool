@@ -1,16 +1,9 @@
 <x-layout>
 
-    {{-- Bread Crumb --}}
-    <div class="navbar bg-white breadcrumb-bar">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/">Home</a></li>
-                <li class="breadcrumb-item" aria-current="page">Project</li>
-            </ol>
-        </nav>
 
 
-        {{-- <div class="dropdown">
+
+    {{-- <div class="dropdown">
             <button class="btn btn-round" role="button" data-toggle="dropdown" aria-expanded="false">
                 <i class="material-icons">settings</i>
 

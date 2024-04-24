@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('table_kanban', function (Blueprint $table) {
+        Schema::create('kanban', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->string('title');
-
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('project_id');
+
+            $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('project_id')->references('id')->on('projects');
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('table_kanban');
+        Schema::dropIfExists('kanban');
     }
 };

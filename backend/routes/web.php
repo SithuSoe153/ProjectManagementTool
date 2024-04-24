@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BoardController;
+use App\Http\Controllers\ColumnController;
 use App\Http\Controllers\KanbanController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
@@ -41,6 +42,9 @@ Route::middleware('auth-user')->group(function () {
     Route::post('/task/{task}/assign-members', [TaskController::class, 'assignMembers'])->name('task.assignMembers');
 
     Route::get('/user/tasks', [TaskController::class, 'index']);
+
+
+    Route::post('/columns/store', [ColumnController::class, 'storeColumn'])->name('columns.store');
 
     // Route::post('/blogs/{blog:slug}/comments', [CommentController::class, 'store']);
     // Route::post('/blogs/{blog:slug}/subscribe', [subscribeController::class, 'subscribe'])->name('blogs.toggle');

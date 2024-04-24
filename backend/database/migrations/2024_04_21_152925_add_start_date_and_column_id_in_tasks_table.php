@@ -12,10 +12,10 @@ s<?php
         public function up(): void
         {
             Schema::table('tasks', function (Blueprint $table) {
-                $table->date('start_date')->nullable();  // Start date for the task
-                $table->unsignedBigInteger('column_id'); // Links task to a specific column
+                $table->date('start_date')->nullable()->after('description');  // Start date for the task
+                $table->unsignedBigInteger('column_id')->nullable()->after('start_date'); // Links task to a specific column
 
-                $table->foreign('column_id')->references('id')->on('columns')->onDelete('cascade');
+                // $table->foreign('column_id')->references('id')->on('columns')->onDelete('cascade');
             });
         }
 

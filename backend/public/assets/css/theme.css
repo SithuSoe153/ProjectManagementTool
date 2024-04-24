@@ -11950,7 +11950,7 @@ label[class*="col"] {
     .container-kanban .container-xl {
         padding-left: 3rem;
         padding-right: 3rem;
-        overflow-x: hidden; /* Add this line */
+        /* overflow-x: hidden; */
     }
     .layout-nav-side .container-kanban {
         height: calc(100vh - 3.5625rem);

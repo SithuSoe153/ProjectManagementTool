@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('title');
             $table->integer('position');  // The order of the column in the board
 
-            $table->foreign('board_id')->references('id')->on('table_kanban')->onDelete('cascade');
+            $table->foreign('board_id')->references('id')->on('kanban')->onDelete('cascade');
 
             $table->timestamps();
         });

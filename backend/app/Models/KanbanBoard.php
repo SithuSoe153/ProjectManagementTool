@@ -10,7 +10,7 @@ class KanbanBoard extends Model
     use HasFactory;
 
 
-    protected $table = 'table_kanban'; // Specifying the table name if different from the default
+    protected $table = 'kanban'; // Specifying the table name if different from the default
 
     protected $fillable = ['title', 'project_id'];
 

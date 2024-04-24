@@ -100,13 +100,54 @@
 
 <body id="home">
 
+    @php
+        function getLastWordFromUrl($url)
+        {
+            // Split the URL path by slashes
+            $parts = explode('/', rtrim($url, '/'));
+
+            // Get the last part of the URL
+            $lastPart = end($parts);
+
+            return $lastPart;
+        }
+    @endphp
+
+
     <div class="layout layout-nav-top">
 
         <x-navbar />
 
 
+
+
+        @if (is_numeric(getLastWordFromUrl(url()->current())))
+            {{-- Bread Crumb --}}
+            <div class="navbar bg-white breadcrumb-bar">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item" aria-current="page">Project</li>
+                    </ol>
+                </nav>
+            </div>
+        @elseif (getLastWordFromUrl(url()->current()) == 'kanbanBoard')
+            {{-- Bread Crumb --}}
+            <div class="navbar bg-white breadcrumb-bar">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Project</a></li>
+                        <li class="breadcrumb-item" aria-current="page">Kanban Board</li>
+                    </ol>
+                </nav>
+            </div>
+        @endif
+
+
+
         @if (session()->has('success'))
-            <div class="alert alert-success mx-auto my-2 col-9 text-center" role="alert">
+            <div class="alert alert-success mx-auto my-2 col-11 text-center" role="alert">
                 {{ session('success') }}
             </div>
         @endif
