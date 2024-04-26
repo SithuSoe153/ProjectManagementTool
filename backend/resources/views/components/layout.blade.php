@@ -14,7 +14,7 @@
     {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
-    <link rel="stylesheet" href="{{ asset('/app.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('/app.css') }}"> --}}
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -61,37 +61,68 @@
     <link href="{{ asset('assets/img/favicon.ico') }}" rel="icon" type="image/x-icon" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Gothic+A1" rel="stylesheet" />
-    <link href="{{ asset('assets/css/theme.css') }}" rel="stylesheet" type="text/css" media="all" />
+    {{-- <link href="{{ asset('assets/css/theme.css') }}" rel="stylesheet" type="text/css" media="all" /> --}}
+
+
+
+
+    <?php
+
+    // Check if the current URL is using HTTPS
+    $isSecure = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
+
+    // Get the current URL
+    $currentUrl = url()->current();
+
+    // Check if the current URL is ngrok or localhost
+    if (strpos($currentUrl, 'ngrok-free.app') !== false) {
+        // Use secure_asset for ngrok URLs
+        echo "<link href=\"" . secure_asset('assets/css/theme.css') . "\" rel=\"stylesheet\" type=\"text/css\" media=\"all\" />";
+        echo "<link href=\"" . secure_asset('/app.css') . "\" rel=\"stylesheet\" type=\"text/css\" media=\"all\" />";
+
+        echo "<script type=\"text/javascript\" src=\"" . secure_asset('assets/js/popper.min.js') . "\"></script>";
+        echo "<script type=\"text/javascript\" src=\"" . secure_asset('assets/js/bootstrap.js') . "\"></script>";
+        echo "<script type=\"text/javascript\" src=\"" . secure_asset('assets/js/autosize.min.js') . "\"></script>";
+
+        echo "<script type=\"text/javascript\" src=\"" . secure_asset('assets/js/prism.js') . "\"></script>";
+        echo "<script type=\"text/javascript\" src=\"" . secure_asset('assets/js/draggable.bundle.legacy.js') . "\"></script>";
+        echo "<script type=\"text/javascript\" src=\"" . secure_asset('assets/js/swap-animation.js') . "\"></script>";
+        echo "<script type=\"text/javascript\" src=\"" . secure_asset('assets/js/dropzone.min.js') . "\"></script>";
+        echo "<script type=\"text/javascript\" src=\"" . secure_asset('assets/js/list.min.js') . "\"></script>";
+
+        echo "<script type=\"text/javascript\" src=\"" . secure_asset('assets/js/theme.js') . "\"></script>";
+    } elseif (strpos($currentUrl, 'localhost') !== false) {
+        // Use asset for localhost URLs
+        $assetUrl = asset('assets/css/theme.css');
+        echo "
+                                                                    <link href=\"" .
+            asset('assets/css/theme.css') .
+            "\" rel=\"stylesheet\" type=\"text/css\" media=\"all\" />";
+
+        echo "<script type=\"text/javascript\" src=\"" . asset('assets/js/popper.min.js') . "\"></script>";
+        echo "<script type=\"text/javascript\" src=\"" . asset('assets/js/bootstrap.js') . "\"></script>";
+        echo "<script type=\"text/javascript\" src=\"" . asset('assets/js/autosize.min.js') . "\"></script>";
+
+        echo "<script type=\"text/javascript\" src=\"" . asset('assets/js/prism.js') . "\"></script>";
+        echo "<script type=\"text/javascript\" src=\"" . asset('assets/js/draggable.bundle.legacy.js') . "\"></script>";
+        echo "<script type=\"text/javascript\" src=\"" . asset('assets/js/swap-animation.js') . "\"></script>";
+        echo "<script type=\"text/javascript\" src=\"" . asset('assets/js/dropzone.min.js') . "\"></script>";
+        echo "<script type=\"text/javascript\" src=\"" . asset('assets/js/list.min.js') . "\"></script>";
+
+        echo "<script type=\"text/javascript\" src=\"" . asset('assets/js/theme.js') . "\"></script>";
+    } else {
+        // Use a default asset URL if the current URL is neither ngrok nor localhost
+        $assetUrl = asset('assets/css/theme.css');
+    }
+
+    // Output the asset URL in your HTML
+
+    ?>
+
 
     <!-- Flatpickr (calendar/date/time picker UI) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
-
-    {{-- pipeline --}}
-    <!-- Required vendor scripts (Do not remove) -->
-    {{-- <script type="text/javascript" src="{{ asset('assets/js/jquery.min.js') }}"></script> --}}
-    <script type="text/javascript" src="{{ asset('assets/js/popper.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('assets/js/bootstrap.js') }}"></script>
-
-    <!-- Optional Vendor Scripts (Remove the plugin script here and comment initializer script out of index.js if site does not use that feature) -->
-
-    <!-- Autosize - resizes textarea inputs as user types -->
-    <script type="text/javascript" src="{{ asset('assets/js/autosize.min.js') }}"></script>
-
-    {{-- <script type="text/javascript" src="{{ asset('assets/js/flatpickr.min.js') }}"></script> --}}
-    <!-- Prism - displays formatted code boxes -->
-    <script type="text/javascript" src="{{ asset('assets/js/prism.js') }}"></script>
-    <!-- Shopify Draggable - drag, drop and sort items on page -->
-    <script type="text/javascript" src="{{ asset('assets/js/draggable.bundle.legacy.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('assets/js/swap-animation.js') }}"></script>
-    <!-- Dropzone - drag and drop files onto the page for uploading -->
-    <script type="text/javascript" src="{{ asset('assets/js/dropzone.min.js') }}"></script>
-    <!-- List.js - filter list elements -->
-    <script type="text/javascript" src="{{ asset('assets/js/list.min.js') }}"></script>
-
-    <!-- Required theme scripts (Do not remove) -->
-    <script type="text/javascript" src="{{ asset('assets/js/theme.js') }}"></script>
 
 
 
@@ -143,7 +174,6 @@
                 </nav>
             </div>
         @endif
-
 
 
         @if (session()->has('success'))
@@ -200,6 +230,7 @@
 
 
             let ip_address = 'http://127.0.0.1:3000';
+            // let ip_address = 'https://656d-116-206-137-142.ngrok-free.app';
             let socket = io(ip_address);
             socket.on('connection');
 
