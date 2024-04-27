@@ -18,13 +18,15 @@ class ProjectController extends Controller
 
         $assignedProjects = auth()->user()->projectRoleAssignments;
 
+        $users = User::all();
+
 
         return view('projects.index', [
             'projects' => $projects->load('tasks.users'),
             'assignedProjects' => $assignedProjects->load('project'),
+            'users' => $users,
         ]);
     }
-
 
     public function show(Project $project)
     {
@@ -41,20 +43,47 @@ class ProjectController extends Controller
 
 
 
-
-
     public function store(ProjectRequest $request)
     {
+
         $cleanData = $request->validated();
         $cleanData['user_id'] = auth()->id();
-        // $cleanData['photo'] = request('photo')->store('/images');
-        $newBlog = Project::create($cleanData);
 
-        // SubscribeNewBlog::all()->each(function ($user) use ($newBlog) {
-        //     Mail::to($user->email)->queue(new Subscriber($newBlog));
-        // });
-        return redirect('/')->with('success', 'Project Create Successful ' . $cleanData['title']);
+        // Remove selected_users from the cleaned data
+        unset($cleanData['selected_users']);
+
+        $project = Project::create($cleanData);
+        // Check if any members are selected
+        if ($request->has('selected_users') && !empty($request->selected_users)) {
+            foreach ($request->selected_users as $userId) {
+                // Create project role assignments for each selected user
+                $project->project_role_assignments()->create([
+                    'user_id' => $userId,
+                    'assign_user_id' => auth()->id(),
+                    // 'role_id' => 7,
+                ]);
+            }
+        }
+
+        return redirect('/')->with('success', 'Project created successfully.');
     }
+
+
+
+
+    // public function store(ProjectRequest $request)
+    // {
+    //     dd($request->all());
+    //     $cleanData = $request->validated();
+    //     $cleanData['user_id'] = auth()->id();
+    //     // $cleanData['photo'] = request('photo')->store('/images');
+    //     $newBlog = Project::create($cleanData);
+
+    //     // SubscribeNewBlog::all()->each(function ($user) use ($newBlog) {
+    //     //     Mail::to($user->email)->queue(new Subscriber($newBlog));
+    //     // });
+    //     return redirect('/')->with('success', 'Project Create Successful ' . $cleanData['title']);
+    // }
 
 
     public function update(ProjectRequest $request, Project $project)

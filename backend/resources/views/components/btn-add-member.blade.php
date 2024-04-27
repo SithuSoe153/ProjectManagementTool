@@ -1,6 +1,6 @@
 @can('add_Member', $project)
 
-    <a href="#" onclick="toggleFormMember()">Add Member</a>
+    <a href="#" class="btn btn-primary btn-sm" onclick="toggleFormMember()">Add Member</a>
 
     {{-- Hidden Add Member form initially --}}
     <div id="memberForm" style="display: none;">

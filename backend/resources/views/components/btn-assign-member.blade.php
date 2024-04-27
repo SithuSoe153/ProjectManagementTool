@@ -1,45 +1,104 @@
-<a onclick="toggleFormAssign({{ $task->id }})" href="" class="mx-2">
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle"
-        viewBox="0 0 16 16">
-        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-        <path
-            d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
-    </svg>
-
+<a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#task-modal">
+    Assign Member
 </a>
 
-<!-- Hidden Member Assign form initially -->
-<div class="container
-col-8" id="assignForm-{{ $task->id }}" style="display: none;">
-    <div class="card-body">
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                var membersSelect = new MultiSelectTag('members_{{ $task->id }}');
-            });
-        </script>
-        {{-- <div class="card"> --}}
-        <form action="{{ route('task.assignMembers', $task->id) }}" method="POST" class="card-body"
-            id="assignMemberForm">
-            @csrf
-            <div class="form-group">
-                <h6 class="card-title">Assign Member</h6>
-            </div>
-            {{ $project->project_role_assignments->unique('user_id')->count() ? '' : 'No members assigned yet' }}
 
-            <div class="form-group">
-                <select name="members[]" id="members_{{ $task->id }}" multiple required aria-required="true">
-                    {{-- Populate options from roles table --}}
-                    @foreach ($project->project_role_assignments->unique('user_id') as $assignment)
-                        <option value="{{ $assignment->user->id }}">
-                            {{ $assignment->user->name }}</option>
-                    @endforeach
-                </select>
+
+<!-- Modal form -->
+{{-- <div id="task-modal" class="modal fade" tabindex="-1" aria-labelledby="task-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!-- Modal header -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="task-modal-label">Assign Members</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <button type="submit" class="btn btn-success my-3">Assign
-                Members</button>
-        </form>
-        {{-- </div> --}}
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form action="{{ route('task.assignMembers', $task->id) }}" method="POST">
+                    @csrf
+                    <!-- Form content -->
+                    <div class="form-group-users">
+                        <!-- Iterate over users -->
+                        @foreach ($project->project_role_assignments->unique('user_id') as $user)
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="members[]" value="{{ $user->user->id }}"
+                                    class="custom-control-input" id="{{ $user->user->id }}">
+                                <label class="custom-control-label" for="{{ $user->user->id }}">
+                                    <span class="d-flex align-items-center">
+                                        <img alt="Claire Connors"
+                                            src="/storage/{{ optional($user)->photo ?: 'images/cat.jpg' }}"
+                                            class="avatar mr-2" />
+                                        <span class="h6 mb-0" data-filter-by="text">{{ $user->user->name }}</span>
+                                    </span>
+                                </label>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Assign Members</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
+</div> --}}
 
-</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var modalContainer = document.getElementById('modal-container');
+        var modal = document.getElementById('task-modal');
+
+        modalContainer.appendChild(modal);
+    });
+</script>
+
+
+<form action="{{ route('task.assignMembers', $task->id) }}" method="POST" enctype="multipart/form-data" class="modal fade"
+    id="task-modal" tabindex="-1" aria-hidden="true" style="z-index: 1050;">
+    @csrf
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Assign Members</h5>
+                <button type="button" class="close btn btn-round" data-dismiss="modal" aria-label="Close">
+                    <i class="material-icons">close</i>
+                </button>
+            </div>
+
+
+            <div class="modal-body  ">
+                <div class="form-group-users">
+                    @foreach ($project->project_role_assignments->unique('user_id') as $user)
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" name="members[]" value="{{ $user->user->id }}"
+                                class="custom-control-input" id="{{ $user->user->id }}">
+
+                            <label class="custom-control-label" for="{{ $user->user->id }}">
+                                <span class="d-flex align-items-center">
+                                    <img alt="Claire Connors"
+                                        src=" /storage/{{ optional($user)->photo ?: 'images/cat.jpg' }}"
+                                        class="avatar mr-2" />
+
+                                    <span class="h6 mb-0" data-filter-by="text">{{ $user->user->name }}</span>
+                                </span>
+                            </label>
+                        </div>
+                    @endforeach
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success">Assign
+                    Members</button>
+            </div>
+        </div>
+</form>

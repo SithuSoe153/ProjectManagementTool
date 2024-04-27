@@ -22,12 +22,25 @@ class ProjectRequest extends FormRequest
     public function rules(): array
     {
 
+
         return [
             'title' => ['required', 'min:5'],
+            'description' => ['nullable'],
             'start_date' => 'required',
-            // 'slug' => 'required',
-            // 'photo' => ['required', 'image'],
-            'due_date' => 'required'
+            'due_date' => 'required',
+            'selected_users' => 'sometimes|array', // Assuming 'selected_users' holds user IDs
+            'selected_users.*' => 'exists:users,id',
+            'roles' => 'sometimes|array', // If managing roles
+            'roles.*' => 'exists:roles,id',
         ];
+
+
+        // return [
+        //     'title' => ['required', 'min:5'],
+        //     'start_date' => 'required',
+        //     // 'slug' => 'required',
+        //     // 'photo' => ['required', 'image'],
+        //     'due_date' => 'required'
+        // ];
     }
 }

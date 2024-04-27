@@ -60,6 +60,7 @@ class DatabaseSeeder extends Seeder
         $project1 = Project::create([
             'user_id' => $user->first()->id,
             'title' => 'Project 1 for ' . $user->first()->name,
+            'description' => 'Project 1 description, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s',
             'start_date' => now()->toDateString(),
             'due_date' => now()->addDays(7)->toDateString(),
         ]);
@@ -67,6 +68,7 @@ class DatabaseSeeder extends Seeder
         $project2 = Project::create([
             'user_id' => $user->last()->id,
             'title' => 'Project 2 for ' . $user->first()->name,
+            'description' => 'Project 1 description, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s',
             'start_date' => now()->toDateString(),
             'due_date' => now()->addDays(7)->toDateString(),
         ]);

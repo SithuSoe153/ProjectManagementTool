@@ -37,7 +37,7 @@ class TaskPolicy
     public function check_Task(User $user, Task $task): bool
     {
         $userTask = $task->users()->where('user_id', $user->id)->first();
-        return $userTask ? $userTask->id == $user->id : false || $user->hasRole(['Admin']);
+        return $userTask ? $userTask->id == $user->id : false || $user->hasRole(['Admin', 'Manager']);
     }
 
     public function view_Task(User $user): bool

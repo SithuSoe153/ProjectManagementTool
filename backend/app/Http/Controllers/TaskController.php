@@ -27,8 +27,9 @@ class TaskController extends Controller
 
 
 
-    public function store(Project $project)
+    public function store(Project $project, Task $task)
     {
+
         $cleanData = request()->validate([
             'title' => ['required'],
             'description' => ['required'],
@@ -40,7 +41,24 @@ class TaskController extends Controller
         // Get the last task's position and increment by 1
         $cleanData['position'] = $project->tasks()->max('position') + 1;
 
+        // Remove selected_users from the cleaned data
+        unset($cleanData['selected_users']);
         $newTask = $project->tasks()->create($cleanData);
+
+        // Check if any members are selected
+        if (request()->has('selected_users') && !empty(request()->selected_users)) {
+            foreach (request()->selected_users as $userId) {
+                // Create project role assignments for each selected user
+                $existingMember = $newTask
+                    ->users()
+                    ->where('user_id', $userId)
+                    ->exists();
+                if (!$existingMember) {
+                    $newTask->users()->attach($userId);
+                }
+            }
+        }
+
 
         return back()->with('success', 'Task Added Successfully');
     }

@@ -1,4 +1,6 @@
 <x-layout>
+
+
     <div class="container col-6 my-3">
 
         <form action="/project/store" method="POST" enctype="multipart/form-data" class="form-control">
