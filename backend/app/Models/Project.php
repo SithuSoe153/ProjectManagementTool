@@ -21,6 +21,11 @@ class Project extends Model
         return $this->hasMany(KanbanBoard::class);
     }
 
+    public function meetingSessions()
+    {
+        return $this->hasMany(VideoCallSession::class);
+    }
+
     public function tasks()
     {
         return $this->hasMany(Task::class);

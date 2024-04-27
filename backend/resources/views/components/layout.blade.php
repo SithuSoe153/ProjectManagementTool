@@ -90,12 +90,15 @@
         echo "<script type=\"text/javascript\" src=\"" . secure_asset('assets/js/dropzone.min.js') . "\"></script>";
         echo "<script type=\"text/javascript\" src=\"" . secure_asset('assets/js/list.min.js') . "\"></script>";
 
+        // echo "<script type=\"text/javascript\" src=\"" . secure_asset('js/agora/AgoraRTC_N-4.7.3.js') . "\"></script>";
+        // echo "<script type=\"text/javascript\" src=\"" . secure_asset('js/agora/main.js') . "\"></script>";
+
         echo "<script type=\"text/javascript\" src=\"" . secure_asset('assets/js/theme.js') . "\"></script>";
     } elseif (strpos($currentUrl, 'localhost') !== false) {
         // Use asset for localhost URLs
         $assetUrl = asset('assets/css/theme.css');
         echo "
-                                                                    <link href=\"" .
+                                                                                                                <link href=\"" .
             asset('assets/css/theme.css') .
             "\" rel=\"stylesheet\" type=\"text/css\" media=\"all\" />";
 
@@ -108,6 +111,9 @@
         echo "<script type=\"text/javascript\" src=\"" . asset('assets/js/swap-animation.js') . "\"></script>";
         echo "<script type=\"text/javascript\" src=\"" . asset('assets/js/dropzone.min.js') . "\"></script>";
         echo "<script type=\"text/javascript\" src=\"" . asset('assets/js/list.min.js') . "\"></script>";
+
+        // echo "<script type=\"text/javascript\" src=\"" . asset('js/agora/AgoraRTC_N-4.7.3.js') . "\"></script>";
+        // echo "<script type=\"text/javascript\" src=\"" . asset('js/agora/main.js') . "\"></script>";
 
         echo "<script type=\"text/javascript\" src=\"" . asset('assets/js/theme.js') . "\"></script>";
     } else {
@@ -170,6 +176,17 @@
                         <li class="breadcrumb-item"><a href="/">Home</a></li>
                         <li class="breadcrumb-item"><a href="#">Project</a></li>
                         <li class="breadcrumb-item" aria-current="page">Kanban Board</li>
+                    </ol>
+                </nav>
+            </div>
+        @elseif (getLastWordFromUrl(url()->current()) == 'meeting')
+            {{-- Bread Crumb --}}
+            <div class="navbar bg-white breadcrumb-bar">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Project</a></li>
+                        <li class="breadcrumb-item" aria-current="page">Meeting</li>
                     </ol>
                 </nav>
             </div>

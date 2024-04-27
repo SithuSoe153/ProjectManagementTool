@@ -40,15 +40,15 @@
                     </style>
 
                     <div class="row mb-1">
-                        <div class="col-12">
+                        <div class="col-6">
                             <a href="/projects/{{ $project->id }}/kanbanBoard" class="kbtn btn-info btn-lg btn-block">
                                 <i class="material-icons">dashboard</i>&nbsp; Kanban Board</button>
                             </a>
                         </div>
-                        {{-- <div class="col-6">
-                            <button type="button" class="btn btn-info btn-lg btn-block"> <i
-                                    class="material-icons">video_call</i>Video Call</button>
-                        </div> --}}
+                        <div class="col-6">
+                            <a href="/projects/{{ $project->id }}/meeting" class="kbtn btn-info btn-lg btn-block">
+                                <i class="material-icons">video_call</i>&nbsp; Video Call</a>
+                        </div>
                     </div>
 
                     {{-- Project Details Card Start --}}
