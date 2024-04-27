@@ -19,21 +19,22 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    public function loginStore()
+    public function loginStore(Request $request)
     {
-        $cleanData = Request()->validate([
+        $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required']
         ]);
 
-        if (auth()->attempt($cleanData)) {
+        if (auth()->attempt($credentials)) {
             return redirect('/')->with('success', 'Welcome Back ' . auth()->user()->name);
         } else {
-            return back()->withErrors([
-                'email' => 'Your Credentials is something wrong'
+            return back()->withInput($request->only('email'))->withErrors([
+                'email' => 'Invalid credentials',
             ]);
         }
     }
+
 
     public function store()
     {

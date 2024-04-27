@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('description')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->date('start_date')->nullable();
             $table->date('due_date')->nullable();

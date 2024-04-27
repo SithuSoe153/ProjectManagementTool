@@ -22,4 +22,9 @@ class Task extends Model
     {
         return $this->belongsToMany(User::class);
     }
+
+    public function column()
+    {
+        return $this->belongsTo(Column::class);
+    }
 }

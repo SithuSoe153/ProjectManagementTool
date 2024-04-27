@@ -14,6 +14,17 @@ class Project extends Model
         return $this->belongsTo(User::class);
     }
 
+    protected $fillable = ['name', 'description'];
+
+    public function kanbanBoards()
+    {
+        return $this->hasMany(KanbanBoard::class);
+    }
+
+    public function meetingSessions()
+    {
+        return $this->hasMany(VideoCallSession::class);
+    }
 
     public function tasks()
     {
