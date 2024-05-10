@@ -47,55 +47,56 @@
 
         <div id="modal-container"></div>
 
+        @if (!request()->is('user/tasks'))
+            <form action="/project/{{ $project->id }}/task" method="POST" enctype="multipart/form-data" class="modal fade"
+                id="task-add-modal" tabindex="-1" aria-hidden="true">
+                @csrf
 
-        <form action="/project/{{ $project->id }}/task" method="POST" enctype="multipart/form-data" class="modal fade"
-            id="task-add-modal" tabindex="-1" aria-hidden="true">
-            @csrf
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">New Task</h5>
+                            <button type="button" class="close btn btn-round" data-dismiss="modal" aria-label="Close">
+                                <i class="material-icons">close</i>
+                            </button>
+                        </div>
+                        <!--end of modal head-->
+                        <ul class="nav nav-tabs nav-fill" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="project-add-details-tab" data-toggle="tab"
+                                    href="#project-add-details" role="tab" aria-controls="project-add-details"
+                                    aria-selected="true">Details</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="project-add-members-tab" data-toggle="tab"
+                                    href="#project-add-members" role="tab" aria-controls="project-add-members"
+                                    aria-selected="false">Members</a>
+                            </li>
+                        </ul>
+                        <div class="modal-body">
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="project-add-details" role="tabpanel">
+                                    <h6>General Details</h6>
+                                    <div class="form-group row align-items-center">
+                                        <label class="col-3">Name</label>
+                                        <input class="form-control col" type="text" placeholder="Task name"
+                                            name="title" value="{{ old('title') }}" />
 
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">New Task</h5>
-                        <button type="button" class="close btn btn-round" data-dismiss="modal" aria-label="Close">
-                            <i class="material-icons">close</i>
-                        </button>
-                    </div>
-                    <!--end of modal head-->
-                    <ul class="nav nav-tabs nav-fill" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="project-add-details-tab" data-toggle="tab"
-                                href="#project-add-details" role="tab" aria-controls="project-add-details"
-                                aria-selected="true">Details</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="project-add-members-tab" data-toggle="tab" href="#project-add-members"
-                                role="tab" aria-controls="project-add-members" aria-selected="false">Members</a>
-                        </li>
-                    </ul>
-                    <div class="modal-body">
-                        <div class="tab-content">
-                            <div class="tab-pane fade show active" id="project-add-details" role="tabpanel">
-                                <h6>General Details</h6>
-                                <div class="form-group row align-items-center">
-                                    <label class="col-3">Name</label>
-                                    <input class="form-control col" type="text" placeholder="Task name" name="title"
-                                        value="{{ old('title') }}" />
+                                        @error('title')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
 
-                                    @error('title')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
+                                    </div>
 
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="col-3">Description</label>
-                                    <textarea class="form-control col" rows="3" placeholder="Task description" name="description"></textarea>
-                                </div>
-                                <hr>
+                                    <div class="form-group row">
+                                        <label class="col-3">Description</label>
+                                        <textarea class="form-control col" rows="3" placeholder="Task description" name="description"></textarea>
+                                    </div>
+                                    <hr>
 
 
-                                <h6>Timeline</h6>
-                                {{-- <div class="form-group row align-items-center">
+                                    <h6>Timeline</h6>
+                                    {{-- <div class="form-group row align-items-center">
                                     <label class="col-3">Start Date</label>
 
                                     <input name="start_date" class="form-control col" type="text"
@@ -119,79 +120,81 @@
 
 
                                 </div> --}}
-                                <div class="form-group row align-items-center">
-                                    <label class="col-3">Due Date</label>
-                                    <input name="due_date" class="form-control col" type="text"
-                                        placeholder="Select a date" data-flatpickr value="{{ old('due_date') }}"
-                                        data-default-date="2021-09-15" data-alt-input="true" id="due_date" />
+                                    <div class="form-group row align-items-center">
+                                        <label class="col-3">Due Date</label>
+                                        <input name="due_date" class="form-control col" type="text"
+                                            placeholder="Select a date" data-flatpickr value="{{ old('due_date') }}"
+                                            data-default-date="2021-09-15" data-alt-input="true" id="due_date" />
 
 
-                                    <script>
-                                        // Initialize Flatpickr
-                                        flatpickr("#due_date", {
-                                            altInput: true,
-                                            altFormat: "F j, Y",
-                                            dateFormat: "Y/m/d",
-                                            defaultDate: "{{ old('due_date') ? old('due_date') : 'today' }}"
-                                        });
-                                    </script>
+                                        <script>
+                                            // Initialize Flatpickr
+                                            flatpickr("#due_date", {
+                                                altInput: true,
+                                                altFormat: "F j, Y",
+                                                dateFormat: "Y/m/d",
+                                                defaultDate: "{{ old('due_date') ? old('due_date') : 'today' }}"
+                                            });
+                                        </script>
 
-                                    @error('due_date')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
+                                        @error('due_date')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
+
+                                    </div>
+                                    <div class="alert alert-warning text-small" role="alert">
+                                        <span>You can change due dates at any time.</span>
+                                    </div>
 
                                 </div>
-                                <div class="alert alert-warning text-small" role="alert">
-                                    <span>You can change due dates at any time.</span>
-                                </div>
-
-                            </div>
 
 
 
-                            {{-- Mambers Start --}}
-                            <div class="tab-pane fade" id="project-add-members" role="tabpanel">
-                                <div class="users-manage" data-filter-list="form-group-users">
+                                {{-- Mambers Start --}}
+                                <div class="tab-pane fade" id="project-add-members" role="tabpanel">
+                                    <div class="users-manage" data-filter-list="form-group-users">
 
-                                    <div class="form-group-users">
+                                        <div class="form-group-users">
 
 
 
-                                        @foreach ($project->project_role_assignments->unique('user_id') as $user)
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" name="selected_users[]" value="{{ $user->user->id }}"
-                                                    class="custom-control-input" id="{{ $user->user->id }}">
+                                            @foreach ($project->project_role_assignments->unique('user_id') as $user)
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" name="selected_users[]"
+                                                        value="{{ $user->user->id }}" class="custom-control-input"
+                                                        id="{{ $user->user->id }}">
 
-                                                <label class="custom-control-label" for="{{ $user->user->id }}">
-                                                    <span class="d-flex align-items-center">
-                                                        <img alt="Claire Connors"
-                                                            src=" /storage/{{ optional($user)->photo ?: 'images/cat.jpg' }}"
-                                                            class="avatar mr-2" />
+                                                    <label class="custom-control-label" for="{{ $user->user->id }}">
+                                                        <span class="d-flex align-items-center">
+                                                            <img alt="Claire Connors"
+                                                                src=" /storage/{{ optional($user)->photo ?: 'images/cat.jpg' }}"
+                                                                class="avatar mr-2" />
 
-                                                        <span class="h6 mb-0"
-                                                            data-filter-by="text">{{ $user->user->name }}</span>
-                                                    </span>
-                                                </label>
-                                            </div>
-                                        @endforeach
+                                                            <span class="h6 mb-0"
+                                                                data-filter-by="text">{{ $user->user->name }}</span>
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            @endforeach
 
 
 
 
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!--end of modal body-->
-                    <div class="modal-footer">
-                        <button role="button" class="btn btn-primary" type="submit">
-                            Create Task
-                        </button>
+                        <!--end of modal body-->
+                        <div class="modal-footer">
+                            <button role="button" class="btn btn-primary" type="submit">
+                                Create Task
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        @endif
 
 
     @endcan
@@ -301,24 +304,26 @@
                                             @endif --}}
 
 
-                                            @if (count($project->project_role_assignments) > 0)
-                                                @foreach ($task->users as $assignment)
-                                                    <li>
+                                            @if (!request()->is('user/tasks'))
+                                                @if (count($project->project_role_assignments) > 0)
+                                                    @foreach ($task->users as $assignment)
+                                                        <li>
 
-                                                        {{-- {{ optional($assignment)->user->name ?? 'No members assigned yet' }} --}}
-                                                        <a href="#" data-toggle="tooltip" title="Kenny">
-                                                            <img alt="Kenny Tran" class="avatar"
-                                                                {{-- src="/storage/{{ optional($assignment)->user->photo ?? 'images/cat.jpg' }}" --}}
-                                                                src="{{ optional($assignment)->photo ? '/storage/' . optional($assignment)->photo : 'https://source.unsplash.com/random?' . $assignment->id }}"
-                                                                data-filter-by="alt" />
-                                                        </a>
+                                                            {{-- {{ optional($assignment)->user->name ?? 'No members assigned yet' }} --}}
+                                                            <a href="#" data-toggle="tooltip" title="Kenny">
+                                                                <img alt="Kenny Tran" class="avatar"
+                                                                    {{-- src="/storage/{{ optional($assignment)->user->photo ?? 'images/cat.jpg' }}" --}}
+                                                                    src="{{ optional($assignment)->photo ? '/storage/' . optional($assignment)->photo : 'https://source.unsplash.com/random?' . $assignment->id }}"
+                                                                    data-filter-by="alt" />
+                                                            </a>
 
 
 
-                                                    </li>
-                                                @endforeach
-                                            @else
-                                                No members assigned yet
+                                                        </li>
+                                                    @endforeach
+                                                @else
+                                                    No members assigned yet
+                                                @endif
                                             @endif
 
 

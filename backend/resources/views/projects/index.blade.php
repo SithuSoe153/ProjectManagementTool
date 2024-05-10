@@ -25,11 +25,50 @@
 
                                 </div>
 
+
+                                {{-- Filter/Serarch --}}
+
+                                <script>
+                                    $(document).ready(function() {
+                                        $('.filter-list-input').on('input', function() {
+                                            var searchText = $(this).val().toLowerCase();
+                                            $('.content-list-body .card').each(function() {
+                                                var projectTitle = $(this).find('.card-title h5').text().toLowerCase();
+                                                if (projectTitle.includes(searchText)) {
+                                                    $(this).removeClass('d-none'); // Remove the 'd-none' class to show the card
+                                                } else {
+                                                    $(this).addClass('d-none'); // Add the 'd-none' class to hide the card
+                                                }
+                                            });
+                                        });
+                                    });
+                                </script>
+
+                                <form class="col-md-auto">
+                                    <div class="input-group input-group-round">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="material-icons">filter_list</i>
+                                            </span>
+                                        </div>
+                                        <input type="search" class="form-control filter-list-input"
+                                            placeholder="Filter Projects" aria-label="Filter Projects" />
+                                    </div>
+                                </form>
+
                             </div>
                             <div class="content-list-body row">
 
                                 <x-project-card :projects="$projects" />
 
+                                @if (!auth()->user()->hasRole(['Admin']))
+
+                                    @if ($assignedProjects->count() == 0)
+                                        <div class="col-lg-6 mb-5">
+                                            No Projects Yet
+                                        </div>
+                                    @endif
+                                @endif
 
                                 @if (!auth()->user()->hasRole(['Admin']))
                                     @foreach ($assignedProjects as $project)
@@ -40,7 +79,7 @@
                                                 {{-- <div class="progress">
                                             <div class="progress-bar bg-danger" role="progressbar" style="width: 60%" aria-valuenow="60"
                                                 aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div> --}}
+                                             </div> --}}
 
                                                 <div class="card-body">
                                                     <div class="dropdown card-options">
@@ -50,40 +89,45 @@
                                                             <i class="material-icons">more_vert</i>
                                                         </button>
 
-                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                        @if (auth()->user()->hasRole(['Admin', 'Manager']))
+                                                            <div class="dropdown-menu dropdown-menu-right">
 
-                                                            @can('update_Project', $project)
-                                                                <button type="button" class="dropdown-item"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModalCenter{{ $project->id }}">
-                                                                    Edit
-                                                                </button>
-                                                            @endcan
-
-
-
-                                                            @can('delete_Project', $project)
-                                                                <form action="/project/{{ $project->id }}/delete"
-                                                                    method="POST">
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                    <button type="submit" class="dropdown-item">
-                                                                        Delete
+                                                                @can('update_Project', $project)
+                                                                    <button type="button" class="dropdown-item"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#exampleModalCenter{{ $project->id }}">
+                                                                        Edit
                                                                     </button>
-                                                                </form>
-                                                            @endcan
+                                                                @endcan
 
 
-                                                            </a>
-                                                        </div>
 
+                                                                @can('delete_Project', $project)
+                                                                    <form action="/project/{{ $project->id }}/delete"
+                                                                        method="POST">
+                                                                        @csrf
+                                                                        @method('DELETE')
+                                                                        <button type="submit" class="dropdown-item">
+                                                                            Delete
+                                                                        </button>
+                                                                    </form>
+                                                                @endcan
+
+
+                                                                </a>
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                     <div class="card-title">
                                                         <a href="#">
-                                                            <h5 data-filter-by="text"> <a <a
+                                                            <h5 data-filter-by="text"
+                                                                data-filter-text="{{ $project->project->title }}">
+                                                                <a
                                                                     href="projects/{{ $project->project->id }}">{{ $project->project->title }}</a>
+                                                            </h5>
                                                         </a>
                                                     </div>
+
 
                                                     <p class="card-text">Created by: {{ $project->project->user->name }}
                                                     </p>
@@ -144,6 +188,7 @@
                         <!--end of content list-->
                     </div>
                     <!--end of tab-->
+
                     <div class="tab-pane fade" id="members" role="tabpanel" data-filter-list="content-list-body">
                         <div class="content-list">
                             <div class="row content-list-head">
@@ -192,8 +237,8 @@
                             <ul class="nav nav-tabs nav-fill" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active" id="project-add-details-tab" data-toggle="tab"
-                                        href="#project-add-details" role="tab" aria-controls="project-add-details"
-                                        aria-selected="true">Details</a>
+                                        href="#project-add-details" role="tab"
+                                        aria-controls="project-add-details" aria-selected="true">Details</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="project-add-members-tab" data-toggle="tab"

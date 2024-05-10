@@ -98,7 +98,7 @@
         // Use asset for localhost URLs
         $assetUrl = asset('assets/css/theme.css');
         echo "
-                                                                                                                <link href=\"" .
+                                                                                                                                                                                        <link href=\"" .
             asset('assets/css/theme.css') .
             "\" rel=\"stylesheet\" type=\"text/css\" media=\"all\" />";
 
@@ -132,6 +132,30 @@
 
 
 
+
+    {{-- <script>
+        $(document).ready(function() {
+            $('.filter-list-input').on('input', function() {
+                var searchText = $(this).val().toLowerCase();
+                $('.content-list-body .card-title').each(function() {
+                    var filterTextElement = $(this).find('h5');
+                    if (filterTextElement.length > 0) {
+                        var filterText = filterTextElement.data('filter-text');
+                        if (filterText && filterText.toLowerCase().includes(searchText)) {
+                            $(this).parent()
+                                .show(); // Show the parent element if the filter matches
+                        } else {
+                            $(this).parent()
+                                .hide(); // Hide the parent element if the filter doesn't match
+                        }
+                    } else {
+                        $(this).parent()
+                            .show(); // If no filter text is found, show the parent element
+                    }
+                });
+            });
+        });
+    </script> --}}
 
 </head>
 
@@ -187,6 +211,17 @@
                         <li class="breadcrumb-item"><a href="/">Home</a></li>
                         <li class="breadcrumb-item"><a href="#">Project</a></li>
                         <li class="breadcrumb-item" aria-current="page">Meeting</li>
+                    </ol>
+                </nav>
+            </div>
+        @elseif (getLastWordFromUrl(url()->current()) == 'message')
+            {{-- Bread Crumb --}}
+            <div class="navbar bg-white breadcrumb-bar">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Project</a></li>
+                        <li class="breadcrumb-item" aria-current="page">Chat</li>
                     </ol>
                 </nav>
             </div>

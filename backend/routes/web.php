@@ -7,6 +7,7 @@ use App\Http\Controllers\KanbanController;
 use App\Http\Controllers\MeetingController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\UserController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +29,7 @@ Route::middleware('auth-user')->group(function () {
     Route::get('/projects/{project}', [ProjectController::class, 'show'])->middleware('can:view_Project,project');
     Route::get('/projects/{project}/kanbanBoard', [KanbanController::class, 'showkanban']);
 
+    Route::get('/projects/{project}/message', [KanbanController::class, 'showkMessage']);
 
 
 
@@ -56,7 +58,17 @@ Route::middleware('auth-user')->group(function () {
     Route::get('/user/tasks', [TaskController::class, 'index']);
 
 
+
+
+
+
     Route::post('/columns/store', [ColumnController::class, 'storeColumn'])->name('columns.store');
+
+
+
+
+
+    Route::get('/manage_users', [UserController::class, 'index']);
 
     // Route::post('/blogs/{blog:slug}/comments', [CommentController::class, 'store']);
     // Route::post('/blogs/{blog:slug}/subscribe', [subscribeController::class, 'subscribe'])->name('blogs.toggle');
@@ -67,8 +79,8 @@ Route::middleware('auth-user')->group(function () {
 });
 
 Route::get('/register', [AuthController::class, 'create']);
+Route::post('/register', [AuthController::class, 'store']);
 Route::middleware('guest')->group(function () {
-    Route::post('/register', [AuthController::class, 'store']);
     Route::get('/login', [AuthController::class, 'login']);
     Route::post('/login', [AuthController::class, 'loginStore']);
 });

@@ -103,7 +103,7 @@
 
         <div id="stream-controls">
             <button id="leave-btn">
-                <i class="material-icons">exit_to_app</i> Leave Stream
+                <i class="material-icons">exit_to_app</i> Leave Meeting
             </button>
 
             <button id="mic-btn"><i class="material-icons">mic</i> Mic On</button>

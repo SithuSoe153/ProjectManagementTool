@@ -137,7 +137,7 @@
                                 <h6>General Details</h6>
                                 <div class="form-group row align-items-center">
                                     <label class="col-3">Name</label>
-                                    <input class="form-control col" type="text" placeholder="Task name"
+                                    <input class="form-control col" type="text" placeholder="Meeting name"
                                         name="title" value="{{ old('title') }}" />
 
                                     @error('title')

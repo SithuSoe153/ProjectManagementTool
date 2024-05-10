@@ -1,6 +1,6 @@
 @foreach ($projects->load('user') as $project)
     <div class="col-lg-6">
-        <div class="card card-project">
+        <div class="card card-project" data-project-id="{{ $project->id }}">
 
             {{-- <div class="progress">
                 <div class="progress-bar bg-danger" role="progressbar" style="width: 60%" aria-valuenow="60"

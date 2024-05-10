@@ -11,7 +11,8 @@ class AuthController extends Controller
 {
     public function create()
     {
-        return view('auth.register');
+        $roles = Role::all();
+        return view('auth.register', compact('roles'));
     }
 
     public function login()
@@ -36,27 +37,47 @@ class AuthController extends Controller
     }
 
 
+
     public function store()
     {
         $cleanData = request()->validate([
-            'name' => ['required'],
-            'username' => ['required', Rule::unique('users', 'username')],
-            'email' => ['required'],
-            'password' => ['required', 'min:6', 'max:16', 'confirmed'],
-            'photo' => ['image']
+            'name' => 'required|string|max:255',
+            'username' => ['required', 'string', 'max:255', Rule::unique('users', 'username')],
+            'email' => 'required|string|email|max:255',
+            'password' => 'required|string|min:6|max:16|confirmed',
+
+            'role' => 'required|exists:roles,id', // Ensure the selected role exists
+
+            'photo' => 'nullable|image'
         ]);
-        $cleanData['photo'] = request()->file('photo')->store('/images');
+
+        // Handle the photo upload
+        if (request()->hasFile('photo') && request()->file('photo')->isValid()) {
+            $cleanData['photo'] = request()->file('photo')->store('images', 'public');
+        } else {
+            unset($cleanData['photo']); // Remove photo from array if not uploaded
+        }
+
+        // Encrypt the password before storing it
+        $cleanData['password'] = bcrypt($cleanData['password']);
+
+        unset($cleanData['role']);
 
         $user = User::create($cleanData);
 
-        // Get the appropriate role (e.g., 'Employee')
-        $role = Role::where('name', 'Employee')->first();
+        // $role = Role::where('name', 'Employee')->first();
+        $role = Role::findOrFail(request('role'));;
 
-        // Attach the role to the user
-        $user->roles()->attach($role);
+        if ($role) {
+            $user->roles()->attach($role);
+        } else {
+            // Optionally handle the error if the role does not exist
+            return redirect()->back()->withErrors(['role' => 'The specified role does not exist.']);
+        }
 
-        auth()->login($user);
-        return redirect('/')->with('success', 'Welcome to creativecoder ' . $user->name);
+        // auth()->login($user);
+
+        return redirect('/')->with('success', 'Successfully Create New User ' . $user->name);
     }
 
     public function update(User $user)

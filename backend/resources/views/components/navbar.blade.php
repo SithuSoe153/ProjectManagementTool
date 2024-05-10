@@ -74,9 +74,11 @@
                 @endif
             @endif
 
-            <li class="nav-item">
-                <a class="nav-link" href="#">Manage Users</a>
-            </li>
+            @if (auth()->user()->hasRole(['Admin']))
+                <li class="nav-item">
+                    <a class="nav-link" href="/manage_users">Manage Users</a>
+                </li>
+            @endif
 
             <li class="nav-item">
                 <a class="nav-link" href="/user/tasks">Assigned Task</a>

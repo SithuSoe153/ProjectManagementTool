@@ -45,7 +45,7 @@ class ProjectController extends Controller
 
     public function store(ProjectRequest $request)
     {
-
+        // dd($request->all());
         $cleanData = $request->validated();
         $cleanData['user_id'] = auth()->id();
 
@@ -67,6 +67,32 @@ class ProjectController extends Controller
 
         return redirect('/')->with('success', 'Project created successfully.');
     }
+
+    public function storeAPI(ProjectRequest $request)
+    {
+        try {
+            $cleanData = $request->validated();
+            $cleanData['user_id'] = 1;
+            unset($cleanData['selected_users']);
+
+            $project = Project::create($cleanData);
+
+            if ($request->has('selected_users') && !empty($request->selected_users)) {
+                foreach ($request->selected_users as $userId) {
+                    $project->project_role_assignments()->create([
+                        'user_id' => $userId,
+                        'assign_user_id' => 1,
+                    ]);
+                }
+            }
+
+            return response()->json(['message' => 'Project created successfully.', 'project' => $project], 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+
 
 
 

@@ -21,4 +21,17 @@ class KanbanController extends Controller
             'roles' => Role::all(),
         ]);
     }
+
+    public function showkMessage(Project $project)
+    {
+        $project->load(['tasks' => function ($query) {
+            $query->orderBy('position', 'asc');
+        }, 'tasks.users']);
+
+        return view('messages.index', [
+            'tasks' => $project->tasks,
+            'project' => $project,
+            'roles' => Role::all(),
+        ]);
+    }
 }
