@@ -66,9 +66,10 @@
                                                     <i class="material-icons">more_vert</i>
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                    <a class="dropdown-item" href="#">Manage</a>
+                                                    <a class="dropdown-item"
+                                                        href="/profile/{{ $user->id }}/edit">Manage</a>
                                                     <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item text-danger" href="#">Leave Team</a>
+                                                    <a class="dropdown-item text-danger" href="#">Delete</a>
                                                 </div>
                                             </div>
 

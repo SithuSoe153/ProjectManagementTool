@@ -58,9 +58,11 @@
 
 
                         {{-- <div class="mb-3"> --}}
-                        <button class="btn btn-round" data-toggle="modal" data-target="#meeting-add-modal">
-                            <i class="material-icons">add</i>
-                        </button>
+                        @if (auth()->user()->hasRole(['Admin', 'Manager']))
+                            <button class="btn btn-round" data-toggle="modal" data-target="#meeting-add-modal">
+                                <i class="material-icons">add</i>
+                            </button>
+                        @endif
                         {{-- </div> --}}
                     </div>
                 </div>

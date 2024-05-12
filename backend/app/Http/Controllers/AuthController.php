@@ -98,7 +98,7 @@ class AuthController extends Controller
         // Attach the role to the user
         // $user->roles()->attach($role);
 
-        auth()->login($user);
+        // auth()->login($user);
         return redirect('/')->with('success', 'Updated profile for  ' . $user->name);
     }
 

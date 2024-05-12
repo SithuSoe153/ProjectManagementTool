@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProjectRequest;
+use App\Models\Message;
 use App\Models\Project;
 use App\Models\ProjectRoleAssignment;
 use App\Models\Role;
@@ -34,10 +35,14 @@ class ProjectController extends Controller
             $query->orderBy('position', 'asc');
         }, 'tasks.users']);
 
+        $projectId = $project->id;
+        $messages = Message::where('project_id', $projectId)->get();
+
         return view('projects.show', [
             'tasks' => $project->tasks,
             'project' => $project,
             'roles' => Role::all(),
+            'messages' => $messages,
         ]);
     }
 

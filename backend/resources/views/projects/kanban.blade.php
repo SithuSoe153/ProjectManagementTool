@@ -516,15 +516,16 @@
 
 
 
-
-
-                <div class="kanban-col">
-                    <div class="card-list">
-                        <a class="btn btn-link btn-sm text-small" data-toggle="modal"
-                            data-target="#board-add-modal">Add
-                            Column</a>
+                @if (auth()->user()->hasRole(['Admin', 'Manager']))
+                    <div class="kanban-col">
+                        <div class="card-list">
+                            <a class="btn btn-link btn-sm text-small" data-toggle="modal"
+                                data-target="#board-add-modal">Add
+                                Column</a>
+                        </div>
                     </div>
-                </div>
+                @endif
+
 
             </div>
 

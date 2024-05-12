@@ -5,6 +5,7 @@ use App\Http\Controllers\BoardController;
 use App\Http\Controllers\ColumnController;
 use App\Http\Controllers\KanbanController;
 use App\Http\Controllers\MeetingController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
@@ -29,7 +30,6 @@ Route::middleware('auth-user')->group(function () {
     Route::get('/projects/{project}', [ProjectController::class, 'show'])->middleware('can:view_Project,project');
     Route::get('/projects/{project}/kanbanBoard', [KanbanController::class, 'showkanban']);
 
-    Route::get('/projects/{project}/message', [KanbanController::class, 'showkMessage']);
 
 
 
@@ -38,6 +38,10 @@ Route::middleware('auth-user')->group(function () {
     Route::get('/projects/{project}/meeting', [MeetingController::class, 'showMeeting']);
     Route::post('/project/{project}/meeting', [MeetingController::class, 'store']);
 
+
+
+    Route::get('/projects/{project}/message', [KanbanController::class, 'showMessage']);
+    Route::post('/messages', [MessageController::class, 'store'])->name('messages.store');
 
 
 
